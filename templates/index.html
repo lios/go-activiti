@@ -1,0 +1,36 @@
+<html>
+<body id="main-back">
+
+<div class="topnav">
+    <h1>{{.Name}}</h1>
+</div>
+
+<div class="topic-back" style="padding-left: 16px">
+    <h2 id="title">Welcome to learning go</h2>
+</div>
+<form method="post" id="signinsubmit" enctype="multipart/form-data" action="/import" style="
+    width: 500px; margin: 0 auto;">
+    <div class="container">
+        <h1>Import File</h1>
+        <hr>
+        <input id="name" type="text" placeholder="请输入" name="name" required>
+        <br>
+        <input id="file" type="file" placeholder="select" name="file" required>
+        <br>
+        <hr>
+        <button id="submit" type="submit" class="submit">Submit</button>
+    </div>
+</form>
+
+<form method="post" id="signinsubmit" action="/select" style="
+    width: 500px; margin: 0 auto;">
+    <div class="container">
+        <h1>查询</h1>
+        <hr>
+        <input id="nameCode" type="text" placeholder="请输入" name="nameCode" required>
+        <hr>
+        <button id="submit" type="submit" class="submit">查询</button>
+    </div>
+</form>
+</body>
+</html>
