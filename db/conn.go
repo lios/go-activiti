@@ -14,13 +14,12 @@ import (
 	"sync"
 )
 
-//var MasterDB *xorm.Engine
-
 var GORM_DB *gorm.DB
 
 var TXDB *sync.Map
 
-var dns string
+var DNS string
+
 var ROOT string
 
 const mainIniPath = "/conf/activiti.properties"
@@ -81,7 +80,7 @@ var (
 )
 
 func fillDns(mysqlConfig map[string]string) {
-	dns = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
+	DNS = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
 		mysqlConfig["username"],
 		mysqlConfig["password"],
 		mysqlConfig["host"],
@@ -92,7 +91,7 @@ func fillDns(mysqlConfig map[string]string) {
 
 func initEngine() error {
 	var err error
-	GORM_DB, err = gorm.Open("mysql", dns)
+	GORM_DB, err = gorm.Open("mysql", DNS)
 	if err != nil {
 		return err
 	}
