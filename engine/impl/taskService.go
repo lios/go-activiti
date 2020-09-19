@@ -6,11 +6,11 @@ import (
 	. "github.com/lios/go-activiti/model"
 )
 
-type TaskServiceImpl struct {
+type TaskService struct {
 }
 
 //流程审批完成
-func (taskService TaskServiceImpl) Complete(taskId int, variables map[string]interface{}, localScope bool) (Task, error) {
+func (taskService TaskService) Complete(taskId int, variables map[string]interface{}, localScope bool) (Task, error) {
 	var task Task
 	exe, err := behavior.GetServiceImpl().CommandExecutor.Exe(cmd.CompleteCmd{TaskId: taskId, Variables: variables, LocalScope: localScope})
 	if err != nil {

@@ -38,7 +38,7 @@ CREATE TABLE `deployment` (
   `name` varchar(64) collate utf8_bin default NULL COMMENT '名称',
   `key` varchar(64) collate utf8_bin default NULL COMMENT '流程定义key',
   `version` bigint(2) default NULL COMMENT '版本',
-  `tenantI_id` bigint(64) default NULL COMMENT '租户id',
+  `tenant_id` varchar(64) default NULL COMMENT '租户id',
   `deploy_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '部署时间',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

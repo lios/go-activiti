@@ -5,7 +5,7 @@ import (
 	. "github.com/lios/go-activiti/engine/entityImpl"
 	"github.com/lios/go-activiti/event"
 	"github.com/lios/go-activiti/event/impl"
-	. "github.com/lios/go-activiti/model"
+	"github.com/lios/go-activiti/model"
 )
 
 type CompleteCmd struct {
@@ -24,7 +24,7 @@ func (taskCmd CompleteCmd) Execute(interceptor behavior.CommandContext) (interfa
 	return task, err
 }
 
-func (taskCmd CompleteCmd) executeTaskComplete(task Task, interceptor behavior.CommandContext) (err error) {
+func (taskCmd CompleteCmd) executeTaskComplete(task model.Task, interceptor behavior.CommandContext) (err error) {
 
 	// All properties set, now firing 'create' events
 	if event.GetEventDispatcher().IsEnabled() {
@@ -65,7 +65,7 @@ func (taskCmd CompleteCmd) executeTaskComplete(task Task, interceptor behavior.C
 	return nil
 }
 
-func deleteTask(task Task) (err error) {
+func deleteTask(task model.Task) (err error) {
 	manager := behavior.GetTaskManager()
 	return manager.DeleteTask(task)
 }

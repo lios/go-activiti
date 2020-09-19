@@ -11,3 +11,7 @@ type Deployment struct {
 	TenantId   string    `gorm:"column:tenant_id"`
 	DeployTime time.Time `gorm:"column:deploy_time"`
 }
+
+func (Deployment) TableName() string {
+	return "deployment"
+}

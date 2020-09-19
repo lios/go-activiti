@@ -110,7 +110,7 @@ func ClearTXDB() {
 func DB() *gorm.DB {
 	db, ok := TXDB.Load(runtime.GoroutineId())
 	if !ok {
-		panic("db not init")
+		panic("TXDB not init")
 	}
 	return db.(*gorm.DB)
 }

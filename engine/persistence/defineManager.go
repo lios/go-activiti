@@ -12,7 +12,7 @@ type DefineManager struct {
 
 func (define DefineManager) FindDeployedProcessDefinitionByKey(key string) ([]*Bytearry, error) {
 	bytearries := make([]*Bytearry, 0)
-	err := db.DB().Where("`key`=?", key).Find(&bytearries).Error
+	err := db.DB().Where("`key`=?", key).Where("deployment_id != 0").Order("version DESC", true).Find(&bytearries).Error
 	return bytearries, err
 }
 

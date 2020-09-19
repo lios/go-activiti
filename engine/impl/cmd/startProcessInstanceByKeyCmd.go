@@ -31,6 +31,7 @@ func (start StartProcessInstanceByKeyCmd) Execute(interceptor behavior.CommandCo
 	instance.Key = process.Id
 	instance.Name = process.Name
 	instance.ProcessDefineId = bytearries[0].Id
+	instance.DeploymentId = bytearries[0].DeploymentId
 	//生成流程实例
 	manager := ProcessInstanceManager{Instance: &instance}
 	manager.CreateProcessInstance()

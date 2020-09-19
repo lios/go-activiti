@@ -7,7 +7,7 @@ type Bytearry struct {
 	Name         string `gorm:"column:name"`
 	Version      int    `gorm:"column:version"`
 	Bytes        string `gorm:"column:bytes"`
-	DeploymentId int    `gorm:"column:deployment_id"`
+	DeploymentId int64  `gorm:"column:deployment_id"`
 }
 
 func (Bytearry) TableName() string {
