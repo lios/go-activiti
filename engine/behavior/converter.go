@@ -105,13 +105,13 @@ func ConvertXMLToElement(model *Definitions) {
 					if lastFlow != nil {
 						var outgoing = lastFlow.GetOutgoing()
 						if outgoing == nil {
-							outgoing = make([]*FlowElement, 0)
+							outgoing = make([]FlowElement, 0)
 						}
-						newOut := append(outgoing, &flows[i])
+						newOut := append(outgoing, flows[i])
 						//设置上一个节点出口
 						lastFlow.SetOutgoing(newOut)
 						//设置当前连线入口
-						flows[i].SetSourceFlowElement(&lastFlow)
+						flows[i].SetSourceFlowElement(lastFlow)
 
 					}
 					//下一个节点
@@ -120,13 +120,13 @@ func ConvertXMLToElement(model *Definitions) {
 					if nextFlow != nil {
 						incoming := nextFlow.GetIncoming()
 						if incoming == nil {
-							incoming = make([]*FlowElement, 0)
+							incoming = make([]FlowElement, 0)
 						}
-						newIn := append(incoming, &flows[i])
+						newIn := append(incoming, flows[i])
 						m := make([]*FlowElement, 1)
 						m[0] = &nextFlow
 						//设置当前连线出口
-						flows[i].SetTargetFlowElement(&nextFlow)
+						flows[i].SetTargetFlowElement(nextFlow)
 						//设置下一个节点入口
 						nextFlow.SetIncoming(newIn)
 					}

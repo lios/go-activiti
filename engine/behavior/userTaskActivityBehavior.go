@@ -27,7 +27,7 @@ func (user UserTaskActivityBehavior) Execute(execution engine.ExecutionEntity) (
 	if err != nil {
 		return err
 	}
-	err = handleAssignments(user.UserTask, task.Id)
+	err = handleAssignments(user.UserTask, task.Id, task.ProcessInstanceId)
 
 	// All properties set, now firing 'create' events
 	if GetProcessEngineConfiguration().EventDispatcher.IsEnabled() {
@@ -41,12 +41,13 @@ func (user UserTaskActivityBehavior) Execute(execution engine.ExecutionEntity) (
 }
 
 //保存候选用户
-func handleAssignments(user engine.UserTask, taskId int64) (err error) {
+func handleAssignments(user engine.UserTask, taskId, processInstanceId int64) (err error) {
 	users := user.CandidateUsers
 	if len(users) >= 0 {
 		for _, user := range users {
 			link := IdentityLink{}
 			link.TaskId = taskId
+			link.ProcessInstanceId = processInstanceId
 			link.UserId = user
 			identityLinkManager := GetIdentityLinkManager()
 			identityLinkManager.IdentityLink = link

@@ -47,7 +47,6 @@ func (historicActinstManager HistoricActinstManager) FindUnfinishedHistoricActiv
 func (historicActinstManager HistoricActinstManager) Update() (err error) {
 	err = db.DB().Model(&HistoricActinst{}).Where("act_id = ?", historicActinstManager.HistoricActinst.ActId).
 		Where("proc_inst_id = ?", historicActinstManager.HistoricActinst.ProcessInstanceId).
-		Where("end_time IS NULL").
 		Update(&historicActinstManager.HistoricActinst).Error
 	if err != nil {
 		log.Infoln("Update HistoricActinst err: ", err)

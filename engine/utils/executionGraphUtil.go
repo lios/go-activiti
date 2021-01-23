@@ -10,7 +10,7 @@ func IsReachable(process Process, sourceElementId string, targetElementId string
 	sourceFlow, ok := sourceFlowElement.(SequenceFlow)
 	if !ok {
 		element := sourceFlow.GetTargetFlowElement()
-		flow, _ := (*element).(SequenceFlow)
+		flow, _ := (element).(SequenceFlow)
 		sourceFlow = flow
 	}
 
@@ -18,7 +18,7 @@ func IsReachable(process Process, sourceElementId string, targetElementId string
 	targetFlow, ok := targetFlowElement.(SequenceFlow)
 	if !ok {
 		element := targetFlow.GetTargetFlowElement()
-		flow, _ := (*element).(SequenceFlow)
+		flow, _ := (element).(SequenceFlow)
 		targetFlow = flow
 	}
 	var visitedElements = make(map[string]FlowElement, 0)
@@ -34,9 +34,9 @@ func isReachable(process Process, sourceElement FlowElement, targetElement FlowE
 	outgoing := sourceElement.GetOutgoing()
 	if outgoing != nil && len(outgoing) > 0 {
 		for _, value := range outgoing {
-			sequenceFlowTarget := (*value).GetTargetFlowElement()
-			if sequenceFlowTarget != nil && visitedElements[(*sequenceFlowTarget).GetId()] != nil {
-				var reachable = isReachable(process, *sequenceFlowTarget, targetElement, visitedElements)
+			sequenceFlowTarget := (value).GetTargetFlowElement()
+			if sequenceFlowTarget != nil && visitedElements[(sequenceFlowTarget).GetId()] != nil {
+				var reachable = isReachable(process, sequenceFlowTarget, targetElement, visitedElements)
 				if reachable {
 					return true
 				}

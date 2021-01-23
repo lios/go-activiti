@@ -59,6 +59,8 @@ func (identityLinkManager IdentityLinkManager) createHistoricIdentityLink() (err
 	identityLink := identityLinkManager.IdentityLink
 	historicIdentityLink := HistoricIdentityLink{}
 	historicIdentityLink.UserId = identityLink.UserId
+	historicIdentityLink.TaskId = identityLink.TaskId
+	historicIdentityLink.ProcessInstanceId = identityLink.ProcessInstanceId
 	historicIdentityLinkManager := HistoricIdentityLinkManager{}
 	historicIdentityLinkManager.HistoricIdentityLink = historicIdentityLink
 	err = historicIdentityLinkManager.Insert()

@@ -24,7 +24,7 @@ func (cont *ContinueProcessOperation) Run() (err error) {
 
 func (cont *ContinueProcessOperation) continueThroughSequenceFlow(sequenceFlow engine.SequenceFlow) {
 	flowElement := sequenceFlow.TargetFlowElement
-	cont.Execution.SetCurrentFlowElement(*flowElement)
+	cont.Execution.SetCurrentFlowElement(flowElement)
 	GetAgenda().PlanContinueProcessOperation(cont.Execution)
 }
 

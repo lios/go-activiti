@@ -71,10 +71,10 @@ type Flow struct {
 	BaseElement
 	Id                string `xml:"id,attr"`
 	Name              string `xml:"name,attr"`
-	IncomingFlow      []*FlowElement
-	OutgoingFlow      []*FlowElement
-	SourceFlowElement *FlowElement
-	TargetFlowElement *FlowElement
+	IncomingFlow      []FlowElement
+	OutgoingFlow      []FlowElement
+	SourceFlowElement FlowElement
+	TargetFlowElement FlowElement
 	Behavior          ActivityBehavior
 }
 
@@ -159,15 +159,15 @@ type MessageEventDefinition struct {
 
 //接口
 type FlowElement interface {
-	SetIncoming(f []*FlowElement)
-	SetOutgoing(f []*FlowElement)
-	GetIncoming() []*FlowElement
-	GetOutgoing() []*FlowElement
+	SetIncoming(f []FlowElement)
+	SetOutgoing(f []FlowElement)
+	GetIncoming() []FlowElement
+	GetOutgoing() []FlowElement
 
-	SetSourceFlowElement(f *FlowElement)
-	SetTargetFlowElement(f *FlowElement)
-	GetSourceFlowElement() *FlowElement
-	GetTargetFlowElement() *FlowElement
+	SetSourceFlowElement(f FlowElement)
+	SetTargetFlowElement(f FlowElement)
+	GetSourceFlowElement() FlowElement
+	GetTargetFlowElement() FlowElement
 
 	GetBehavior() ActivityBehavior
 	SetBehavior(behavior ActivityBehavior)
@@ -193,31 +193,31 @@ func (pocess Process) GetFlowElement(flowElementId string) FlowElement {
 	return pocess.FlowMap[flowElementId]
 }
 
-func (flow *Flow) SetIncoming(f []*FlowElement) {
+func (flow *Flow) SetIncoming(f []FlowElement) {
 	flow.IncomingFlow = f
 }
-func (flow *Flow) SetOutgoing(f []*FlowElement) {
+func (flow *Flow) SetOutgoing(f []FlowElement) {
 	flow.OutgoingFlow = f
 }
 
-func (flow *Flow) GetIncoming() []*FlowElement {
+func (flow *Flow) GetIncoming() []FlowElement {
 	return flow.IncomingFlow
 }
-func (flow *Flow) GetOutgoing() []*FlowElement {
+func (flow *Flow) GetOutgoing() []FlowElement {
 	return flow.OutgoingFlow
 }
 
-func (flow *Flow) SetSourceFlowElement(f *FlowElement) {
+func (flow *Flow) SetSourceFlowElement(f FlowElement) {
 	flow.SourceFlowElement = f
 }
-func (flow *Flow) SetTargetFlowElement(f *FlowElement) {
+func (flow *Flow) SetTargetFlowElement(f FlowElement) {
 	flow.TargetFlowElement = f
 }
 
-func (flow *Flow) GetSourceFlowElement() *FlowElement {
+func (flow *Flow) GetSourceFlowElement() FlowElement {
 	return flow.SourceFlowElement
 }
-func (flow *Flow) GetTargetFlowElement() *FlowElement {
+func (flow *Flow) GetTargetFlowElement() FlowElement {
 	return flow.TargetFlowElement
 }
 

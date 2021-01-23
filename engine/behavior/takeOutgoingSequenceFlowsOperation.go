@@ -39,16 +39,16 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 	var outgoingSequenceFlows = make([]FlowElement, 0)
 	if len(flowElements) > 0 {
 		for _, flowElement := range flowElements {
-			sequenceFlow := (*flowElement).(SequenceFlow)
+			sequenceFlow := (flowElement).(SequenceFlow)
 			if !task.EvaluateConditions || utils.HasTrueCondition(sequenceFlow, execution) {
-				outgoingSequenceFlows = append(outgoingSequenceFlows, *flowElement)
+				outgoingSequenceFlows = append(outgoingSequenceFlows, flowElement)
 			}
 		}
 		if outgoingSequenceFlows != nil && len(outgoingSequenceFlows) == 0 {
 			if defaultSequenceFlowId != "" {
 				for _, flowElement := range flowElements {
-					if defaultSequenceFlowId == (*flowElement).GetId() {
-						outgoingSequenceFlows = append(outgoingSequenceFlows, *flowElement)
+					if defaultSequenceFlowId == (flowElement).GetId() {
+						outgoingSequenceFlows = append(outgoingSequenceFlows, flowElement)
 					}
 				}
 			}

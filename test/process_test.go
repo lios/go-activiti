@@ -76,7 +76,7 @@ func TestComplete(t *testing.T) {
 	taskService := peocess.TaskService{}
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
-	taskService.Complete(23, variables, true)
+	taskService.Complete(29, variables, true)
 }
 
 //测试驳回
@@ -84,7 +84,7 @@ func TestBackTask(t *testing.T) {
 	taskService := peocess.TaskService{}
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
-	taskService.BackTask(24, "sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5")
+	taskService.BackTask(26, "sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5")
 }
 
 //测试获取协程ID

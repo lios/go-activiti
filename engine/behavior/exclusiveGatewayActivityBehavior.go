@@ -17,14 +17,14 @@ func (exclusive ExclusiveGatewayActivityBehavior) Execute(execution engine.Execu
 func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution engine.ExecutionEntity) (err error) {
 	element := execution.GetCurrentFlowElement()
 	exclusiveGateway, ok := element.(engine.ExclusiveGateway)
-	var outgoingSequenceFlow *engine.FlowElement
-	var defaultSequenceFlow *engine.FlowElement
+	var outgoingSequenceFlow engine.FlowElement
+	var defaultSequenceFlow engine.FlowElement
 	if ok {
 		defaultSequenceFlowId := exclusiveGateway.DefaultFlow
 		sequenceFlowIterator := exclusiveGateway.GetOutgoing()
 		if sequenceFlowIterator != nil && len(sequenceFlowIterator) > 0 {
 			for _, sequenceFlow := range sequenceFlowIterator {
-				flow := (*sequenceFlow).(engine.SequenceFlow)
+				flow := (sequenceFlow).(engine.SequenceFlow)
 				conditionEvaluatesToTrue := utils.HasTrueCondition(flow, execution)
 				if conditionEvaluatesToTrue && defaultSequenceFlowId != "" && defaultSequenceFlowId != flow.Id {
 					outgoingSequenceFlow = sequenceFlow
@@ -37,10 +37,10 @@ func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution engine.Executi
 		}
 	}
 	if outgoingSequenceFlow != nil {
-		execution.SetCurrentFlowElement(*outgoingSequenceFlow)
+		execution.SetCurrentFlowElement(outgoingSequenceFlow)
 	} else {
 		if defaultSequenceFlow != nil {
-			execution.SetCurrentFlowElement(*defaultSequenceFlow)
+			execution.SetCurrentFlowElement(defaultSequenceFlow)
 		}
 	}
 	//执行出口逻辑，设置条件判断
