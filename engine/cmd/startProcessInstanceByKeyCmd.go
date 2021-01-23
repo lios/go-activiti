@@ -4,6 +4,7 @@ import (
 	"github.com/lios/go-activiti/engine"
 	"github.com/lios/go-activiti/engine/behavior"
 	. "github.com/lios/go-activiti/engine/entityImpl"
+	. "github.com/lios/go-activiti/engine/manager"
 	. "github.com/lios/go-activiti/engine/persistence"
 	. "github.com/lios/go-activiti/model"
 	"time"
@@ -17,7 +18,7 @@ type StartProcessInstanceByKeyCmd struct {
 }
 
 func (start StartProcessInstanceByKeyCmd) Execute(interceptor behavior.CommandContext) (interface{}, error) {
-	defineManager := behavior.GetDefineManager()
+	defineManager := GetDefineManager()
 	bytearries, err := defineManager.FindDeployedProcessDefinitionByKey(start.ProcessDefinitionKey)
 	if err != nil {
 		return nil, err

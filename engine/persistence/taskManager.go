@@ -1,8 +1,10 @@
 package persistence
 
 import (
+	"fmt"
 	"github.com/lios/go-activiti/db"
 	"github.com/lios/go-activiti/engine"
+	. "github.com/lios/go-activiti/entity"
 	"github.com/lios/go-activiti/errs"
 	. "github.com/lios/go-activiti/model"
 	"github.com/prometheus/common/log"
@@ -123,4 +125,22 @@ func recordTaskEnd(task Task) (err error) {
 	historicActinstManager := HistoricActinstManager{}
 	historicActinstManager.HistoricActinst = historicActinst
 	return historicActinstManager.UpdateTaskId()
+}
+
+func (taskManager TaskManager) QueryUndoTask(userId, groupId string) (taskResult []TaskEntity, err error) {
+	taskResult = make([]TaskEntity, 0)
+	var sql = "SELECT  t.*,i.user_id,i.group_id FROM task t " +
+		"LEFT JOIN identity_link i on t.id = i.task_id " +
+		"WHERE 1=1 "
+	if userId != "" {
+		sql += fmt.Sprintf("AND i.user_id = '%s' ", userId)
+	}
+	if groupId != "" {
+		sql += fmt.Sprintf("AND i.group_id = '%s' ", groupId)
+	}
+	err = db.DB().Raw(sql).Find(&taskResult).Error
+	if err != nil {
+		return taskResult, err
+	}
+	return taskResult, nil
 }

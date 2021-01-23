@@ -1,6 +1,9 @@
 package behavior
 
-import "github.com/lios/go-activiti/engine"
+import (
+	"github.com/lios/go-activiti/engine"
+	. "github.com/lios/go-activiti/engine/manager"
+)
 
 type EndExecutionOperation struct {
 	AbstractOperation

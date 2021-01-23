@@ -2,6 +2,7 @@ package behavior
 
 import (
 	"github.com/lios/go-activiti/engine"
+	. "github.com/lios/go-activiti/engine/manager"
 	"github.com/lios/go-activiti/engine/utils"
 )
 

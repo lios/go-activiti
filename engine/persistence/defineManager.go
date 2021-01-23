@@ -48,7 +48,7 @@ func (define DefineManager) CreateByteArry(name string, key string, bytes string
 func (define DefineManager) FindProcessByTask(processInstanceId int64) (Bytearry, error) {
 	bytearries := make([]Bytearry, 0)
 	var sql = "SELECT b.* FROM bytearry b " +
-		"LEFT JOIN process_instance p on b.key = p.key " +
+		"LEFT JOIN process_instance p on b.id = p.process_define_id " +
 		"WHERE p.id = ? "
 	err := db.DB().Raw(sql, processInstanceId).Find(&bytearries).Error
 	if err != nil {

@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/lios/go-activiti/engine/behavior"
 	. "github.com/lios/go-activiti/engine/entityImpl"
+	. "github.com/lios/go-activiti/engine/manager"
 	"github.com/lios/go-activiti/event"
 	"github.com/lios/go-activiti/event/impl"
 	"github.com/lios/go-activiti/model"
@@ -15,7 +16,7 @@ type CompleteCmd struct {
 }
 
 func (taskCmd CompleteCmd) Execute(interceptor behavior.CommandContext) (interface{}, error) {
-	manager := behavior.GetTaskManager()
+	manager := GetTaskManager()
 	task, err := manager.FindById(taskCmd.TaskId)
 	if err != nil {
 		return task, err
@@ -38,7 +39,7 @@ func (taskCmd CompleteCmd) executeTaskComplete(task model.Task, interceptor beha
 	if err != nil {
 		return err
 	}
-	defineManager := behavior.GetDefineManager()
+	defineManager := GetDefineManager()
 	bytearry, err := defineManager.FindProcessByTask(task.ProcessInstanceId)
 	if err != nil {
 		return err
@@ -66,6 +67,6 @@ func (taskCmd CompleteCmd) executeTaskComplete(task model.Task, interceptor beha
 }
 
 func deleteTask(task model.Task) (err error) {
-	manager := behavior.GetTaskManager()
+	manager := GetTaskManager()
 	return manager.DeleteTask(task)
 }

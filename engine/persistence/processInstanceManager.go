@@ -64,6 +64,7 @@ func (processInstanceManager *ProcessInstanceManager) createHistoricProcessInsta
 	historicProcess.BusinessKey = processInstance.BusinessKey
 	historicProcess.StartUserId = processInstance.StartUserId
 	historicProcess.Key = processInstance.Key
+	historicProcess.ProcessDefineId = processInstance.ProcessDefineId
 
 	historicProcessManager := HistoricProcessManager{}
 	historicProcessManager.HistoricProcess = historicProcess

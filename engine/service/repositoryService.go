@@ -2,7 +2,7 @@ package engine
 
 import (
 	"github.com/lios/go-activiti/engine/behavior"
-	"github.com/lios/go-activiti/engine/impl/cmd"
+	"github.com/lios/go-activiti/engine/cmd"
 )
 
 type RepositoryService struct {

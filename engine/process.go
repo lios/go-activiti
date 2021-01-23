@@ -28,9 +28,9 @@ type Definitions struct {
 	Message            []Message `xml:"message"`
 }
 type Process struct {
-	ProcessName            xml.Name `xml:"process"`
-	Id                     string   `xml:"id,attr"`
-	Name                   string
+	ProcessName            xml.Name                 `xml:"process"`
+	Id                     string                   `xml:"id,attr"`
+	Name                   string                   `xml:"name,attr"`
 	Documentation          string                   `xml:"documentation"`
 	IsExecutable           string                   `xml:"isExecutable,attr"`
 	StartEvent             []StartEvent             `xml:"startEvent"`

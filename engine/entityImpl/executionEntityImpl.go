@@ -3,6 +3,7 @@ package entityImpl
 import (
 	"github.com/lios/go-activiti/engine"
 	. "github.com/lios/go-activiti/engine/behavior"
+	. "github.com/lios/go-activiti/engine/manager"
 	. "github.com/lios/go-activiti/engine/persistence"
 	. "github.com/lios/go-activiti/engine/variable"
 	"github.com/lios/go-activiti/errs"
