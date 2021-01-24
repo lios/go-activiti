@@ -50,7 +50,13 @@ func Converter(bytes []byte) Process {
 			user := p.UserTask
 			if user != nil {
 				for i, u := range user {
-					behavior := UserTaskActivityBehavior{UserTask: user[i]}
+					assignments := checkAssignments(u)
+					var behavior ActivityBehavior
+					if !assignments {
+						behavior = UserAutoTaskActivityBehavior{UserTask: user[i], ProcessKey: p.Id}
+					} else {
+						behavior = UserTaskActivityBehavior{UserTask: user[i]}
+					}
 					user[i].SetBehavior(behavior)
 					processes[j].FlowMap[u.Id] = user[i]
 				}
@@ -134,4 +140,13 @@ func ConvertXMLToElement(model *Definitions) {
 			}
 		}
 	}
+}
+
+func checkAssignments(task UserTask) bool {
+	users := task.CandidateUsers
+	groups := task.CandidateGroups
+	if (users == nil || len(users) < 1) && (groups == nil || len(groups) < 1) {
+		return false
+	}
+	return true
 }

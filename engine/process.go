@@ -95,9 +95,10 @@ type EndEvent struct {
 //用户任务
 type UserTask struct {
 	*Flow
-	UserTaskName   xml.Name `xml:"userTask"`
-	Assignee       string   `xml:"assignee,attr"`
-	CandidateUsers []string `xml:"candidateUsers,attr"`
+	UserTaskName    xml.Name `xml:"userTask"`
+	Assignee        string   `xml:"assignee,attr"`
+	CandidateUsers  []string `xml:"candidateUsers,attr"`
+	CandidateGroups []string `xml:"candidateGroups,attr"`
 }
 
 //连线

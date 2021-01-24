@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/lios/go-activiti/engine/behavior"
+	_ "github.com/lios/go-activiti/engine/handler"
 	peocess "github.com/lios/go-activiti/engine/service"
 	"github.com/lios/go-activiti/event"
 	"github.com/lios/go-activiti/runtime"
@@ -12,9 +13,10 @@ import (
 )
 
 const (
-	key       = "process_demo"
-	userKey   = "userTest"
-	file_path = "F:\\Work\\go-activiti\\resources\\userTest.bpmn20.xml"
+	key         = "process_demo"
+	userKey     = "userTest"
+	userAutoKey = "userAuto"
+	file_path   = "F:\\Work\\go-activiti\\resources\\userAuto.bpmn20.xml"
 )
 
 type ActivitiListener struct {
@@ -33,7 +35,7 @@ func TestDeployMentProcss(t *testing.T) {
 		bytes, err := ioutil.ReadAll(f)
 		if err == nil {
 			repository := peocess.RepositoryService{}
-			repository.Deploy(userKey, userKey, bytes)
+			repository.Deploy(userAutoKey, userAutoKey, bytes)
 		}
 	}
 
@@ -62,6 +64,16 @@ func TestStartProcss(t *testing.T) {
 	runtime.StartProcessInstanceByKey(userKey, variables, "", "")
 }
 
+//测试发起流程
+func TestStartAutoProcss(t *testing.T) {
+	variables := make(map[string]interface{}, 0)
+	variables["name"] = "lisi"
+	variables["age"] = 18
+	variables["isOld"] = true
+	runtime := peocess.RuntimeService{}
+	runtime.StartProcessInstanceByKey(userAutoKey, variables, "", "")
+}
+
 //测试查询代办
 func TestQueryUndoTask(t *testing.T) {
 	taskService := peocess.TaskService{}
@@ -76,7 +88,7 @@ func TestComplete(t *testing.T) {
 	taskService := peocess.TaskService{}
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
-	taskService.Complete(29, variables, true)
+	taskService.Complete(31, variables, true)
 }
 
 //测试驳回
