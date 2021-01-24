@@ -28,7 +28,9 @@ func (user UserAutoTaskActivityBehavior) Execute(execution engine.ExecutionEntit
 
 	activitiConstructor, err := GetConstructorByName(user.ProcessKey)
 	if err != nil {
-		return err
+		manager.DeleteTask(task)
+		GetAgenda().PlanTriggerExecutionOperation(execution)
+		return nil
 	}
 	constructor := activitiConstructor(execution)
 	reflectConstructor := reflect.ValueOf(constructor)
@@ -38,6 +40,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution engine.ExecutionEntit
 	if !b {
 		manager.DeleteTask(task)
 		GetAgenda().PlanTriggerExecutionOperation(execution)
+		return err
 	}
 
 	callResponse := method.Func.Call(taskParams)

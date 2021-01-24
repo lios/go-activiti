@@ -55,7 +55,7 @@ func Converter(bytes []byte) Process {
 					if !assignments {
 						behavior = UserAutoTaskActivityBehavior{UserTask: user[i], ProcessKey: p.Id}
 					} else {
-						behavior = UserTaskActivityBehavior{UserTask: user[i]}
+						behavior = UserTaskActivityBehavior{UserTask: user[i], ProcessKey: p.Id}
 					}
 					user[i].SetBehavior(behavior)
 					processes[j].FlowMap[u.Id] = user[i]

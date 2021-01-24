@@ -4,7 +4,11 @@
     <startEvent id="startEvent1"></startEvent>
     <userTask id="sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5" name="User001"></userTask>
     <sequenceFlow id="sid-ADBC11EB-3584-4382-81BC-A44104369AF2" sourceRef="startEvent1" targetRef="sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5"></sequenceFlow>
-    <userTask id="sid-13D7112C-4E01-4DA7-BECD-DE00025E13EB" name="User002" activiti:candidateUsers="lisi"></userTask>
+    <userTask id="sid-13D7112C-4E01-4DA7-BECD-DE00025E13EB" name="User002" activiti:candidateUsers="lisi">
+      <extensionElements>
+        <activiti:taskListener event="create"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="sid-5A045681-67D9-4C0D-A7FB-9D67B9990307" sourceRef="sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5" targetRef="sid-13D7112C-4E01-4DA7-BECD-DE00025E13EB"></sequenceFlow>
     <exclusiveGateway id="sid-4CA09D47-EB61-4FB1-AE9A-24E06A606811"></exclusiveGateway>
     <sequenceFlow id="sid-5CD4745F-EBE0-4AAB-A7BE-E0381FC5D222" sourceRef="sid-13D7112C-4E01-4DA7-BECD-DE00025E13EB" targetRef="sid-4CA09D47-EB61-4FB1-AE9A-24E06A606811"></sequenceFlow>

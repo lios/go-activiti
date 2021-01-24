@@ -2,6 +2,8 @@ package behavior
 
 import (
 	"github.com/lios/go-activiti/engine"
+	. "github.com/lios/go-activiti/engine/common"
+	. "github.com/lios/go-activiti/engine/handler"
 	. "github.com/lios/go-activiti/engine/manager"
 	. "github.com/lios/go-activiti/engine/persistence"
 	"github.com/lios/go-activiti/event"
@@ -11,7 +13,8 @@ import (
 )
 
 type UserTaskActivityBehavior struct {
-	UserTask engine.UserTask
+	UserTask   engine.UserTask
+	ProcessKey string
 }
 
 //普通用户节点处理
@@ -36,6 +39,18 @@ func (user UserTaskActivityBehavior) Execute(execution engine.ExecutionEntity) (
 			return err
 		}
 		GetProcessEngineConfiguration().EventDispatcher.DispatchEvent(activitiEntityEvent)
+	}
+	extensionElements := user.UserTask.ExtensionElements
+	if extensionElements.TaskListener != nil && len(extensionElements.TaskListener) > 0 {
+		taskListeners := extensionElements.TaskListener
+		for _, listener := range taskListeners {
+			if listener.EventType == TASK_TYPE_CREATE {
+				err = PerformTaskListener(execution, user.UserTask, user.ProcessKey)
+				if err != nil {
+					return err
+				}
+			}
+		}
 	}
 	return err
 }

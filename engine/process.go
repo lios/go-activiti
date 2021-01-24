@@ -95,10 +95,20 @@ type EndEvent struct {
 //用户任务
 type UserTask struct {
 	*Flow
-	UserTaskName    xml.Name `xml:"userTask"`
-	Assignee        string   `xml:"assignee,attr"`
-	CandidateUsers  []string `xml:"candidateUsers,attr"`
-	CandidateGroups []string `xml:"candidateGroups,attr"`
+	UserTaskName      xml.Name          `xml:"userTask"`
+	Assignee          string            `xml:"assignee,attr"`
+	CandidateUsers    []string          `xml:"candidateUsers,attr"`
+	CandidateGroups   []string          `xml:"candidateGroups,attr"`
+	ExtensionElements ExtensionElements `xml:"extensionElements"`
+}
+
+type ExtensionElements struct {
+	ExtensionElementName xml.Name       `xml:"extensionElements"`
+	TaskListener         []TaskListener `xml:"taskListener"`
+}
+type TaskListener struct {
+	TaskListenerName xml.Name `xml:"taskListener"`
+	EventType        string   `xml:"event,attr"`
 }
 
 //连线

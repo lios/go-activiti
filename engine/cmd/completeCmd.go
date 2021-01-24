@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"github.com/lios/go-activiti/engine"
 	"github.com/lios/go-activiti/engine/behavior"
+	"github.com/lios/go-activiti/engine/common"
 	. "github.com/lios/go-activiti/engine/entityImpl"
+	"github.com/lios/go-activiti/engine/handler"
 	. "github.com/lios/go-activiti/engine/manager"
 	"github.com/lios/go-activiti/event"
 	"github.com/lios/go-activiti/event/impl"
@@ -50,7 +53,8 @@ func (taskCmd CompleteCmd) executeTaskComplete(task model.Task, interceptor beha
 	execution.SetCurrentFlowElement(currentTask)
 	execution.SetCurrentActivityId(task.TaskDefineKey)
 	processInstanceManager := behavior.GetProcessInstanceManager()
-	execution.SetProcessDefineId(processInstanceManager.GetProcessInstance(task.ProcessInstanceId).ProcessDefineId)
+	instance := processInstanceManager.GetProcessInstance(task.ProcessInstanceId)
+	execution.SetProcessDefineId(instance.ProcessDefineId)
 	execution.SetProcessInstanceId(task.ProcessInstanceId)
 	taskExecution.SetTaskId(task.Id)
 	taskExecution.ExecutionEntityImpl = execution
@@ -61,6 +65,18 @@ func (taskCmd CompleteCmd) executeTaskComplete(task model.Task, interceptor beha
 	}
 	if err != nil {
 		return err
+	}
+	userTask, ok := currentTask.(engine.UserTask)
+	if ok {
+		taskListeners := userTask.ExtensionElements.TaskListener
+		for _, listener := range taskListeners {
+			if listener.EventType == common.TASK_TYPE_COMPLETED {
+				err = handler.PerformTaskListener(&execution, userTask, instance.Key)
+				if err != nil {
+					return err
+				}
+			}
+		}
 	}
 	interceptor.Agenda.PlanTriggerExecutionOperation(&taskExecution)
 	return nil

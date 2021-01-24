@@ -4,7 +4,6 @@ import (
 	"fmt"
 	. "github.com/lios/go-activiti/engine"
 	"github.com/lios/go-activiti/engine/common"
-	"github.com/lios/go-activiti/errs"
 )
 
 func init() {
@@ -39,5 +38,5 @@ func (test *TestIActiviti) User001() (code interface{}, err error) {
 }
 
 func (test *TestIActiviti) User002() (code interface{}, err error) {
-	return "", errs.ProcessError{"1007", "err"}
+	return common.ACTIVITI_HANDLER_CODE, nil
 }
