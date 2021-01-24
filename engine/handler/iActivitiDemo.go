@@ -14,7 +14,6 @@ func NewTestIActiviti(entity ExecutionEntity) IActiviti {
 	return &TestIActiviti{
 		Entity: entity,
 	}
-
 }
 
 type TestIActiviti struct {
