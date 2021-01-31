@@ -1,0 +1,72 @@
+package behavior
+
+import (
+	. "github.com/lios/go-activiti/engine/common"
+	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	. "github.com/lios/go-activiti/engine/impl/handler"
+	"github.com/lios/go-activiti/engine/impl/invocation"
+	"github.com/lios/go-activiti/engine/impl/manager"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity"
+	. "github.com/lios/go-activiti/model"
+	"reflect"
+	"time"
+)
+
+type UserAutoTaskActivityBehavior struct {
+	UserTask   model.UserTask
+	ProcessKey string
+}
+
+//自动通过用户节点处理
+func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntity) (err error) {
+	task := Task{}
+	task.ProcessInstanceId = execution.GetProcessInstanceId()
+	task.Assignee = user.UserTask.Assignee
+	task.StartTime = time.Now()
+	task.TaskDefineKey = user.UserTask.Id
+	task.TaskDefineName = user.UserTask.Name
+	dataManager := manager.GetDataManager().TaskDataManager
+	dataManager.Task = &task
+	err = dataManager.Insert(execution)
+
+	activitiConstructor, err := GetConstructorByName(user.ProcessKey)
+	if err != nil {
+		dataManager.DeleteTask(task)
+		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+		return nil
+	}
+	constructor := activitiConstructor(execution)
+	reflectConstructor := reflect.ValueOf(constructor)
+	taskParams := []reflect.Value{reflectConstructor}
+
+	method, b := reflectConstructor.Type().MethodByName(user.UserTask.Name)
+	if !b {
+		dataManager.DeleteTask(task)
+		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+		return err
+	}
+
+	callResponse := method.Func.Call(taskParams)
+
+	code := callResponse[0].Interface()
+	errRes := callResponse[1].Interface()
+	code = code.(string)
+	if code != ACTIVITI_HANDLER_CODE {
+		err := errRes.(error)
+		return err
+	}
+	dataManager.DeleteTask(task)
+	invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+	return err
+}
+
+//普通用户节点处理
+func (user UserAutoTaskActivityBehavior) Trigger(execution entity.ExecutionEntity) {
+	user.Leave(execution)
+}
+
+func (user UserAutoTaskActivityBehavior) Leave(execution entity.ExecutionEntity) {
+	element := execution.GetCurrentFlowElement()
+	execution.SetCurrentFlowElement(element)
+	invocation.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
+}
