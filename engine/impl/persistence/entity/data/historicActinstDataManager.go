@@ -2,14 +2,15 @@ package data
 
 import (
 	"github.com/lios/go-activiti/db"
-	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/bpmn"
 	. "github.com/lios/go-activiti/model"
 	"github.com/prometheus/common/log"
 	"reflect"
+	"time"
 )
 
 type HistoricActinstDataManager struct {
-	AbstractDataManager
+	DataManagers
 	HistoricActinst HistoricActinst
 }
 
@@ -55,9 +56,11 @@ func (historicActinstManager HistoricActinstDataManager) UpdateProcessInstanceId
 	return err
 }
 
-func (historicActinstManager HistoricActinstDataManager) UpdateTaskId() (err error) {
-	err = db.DB().Model(&HistoricActinst{}).Where("task_id = ?", historicActinstManager.HistoricActinst.TaskId).
-		Update(&historicActinstManager.HistoricActinst).Error
+func (historicActinstManager HistoricActinstDataManager) UpdateTaskId(taskId int64) (err error) {
+	actinst := HistoricActinst{}
+	actinst.EndTime = time.Now()
+	err = db.DB().Model(&HistoricActinst{}).Where("task_id = ?", taskId).
+		Update(&actinst).Error
 	if err != nil {
 		log.Infoln("Update HistoricActinst err: ", err)
 	}
@@ -75,7 +78,7 @@ func (historicActinstManager HistoricActinstDataManager) UpdateTaskId() (err err
 //	return err
 //}
 
-func (historicActinstManager HistoricActinstDataManager) parseActivityType(element model.FlowElement) string {
+func (historicActinstManager HistoricActinstDataManager) parseActivityType(element bpmn.FlowElement) string {
 	typeOf := reflect.TypeOf(element)
 	return typeOf.Name()
 }

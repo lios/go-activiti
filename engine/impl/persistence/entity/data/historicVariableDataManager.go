@@ -7,6 +7,7 @@ import (
 )
 
 type HistoricVariableDataManager struct {
+	DataManagers
 	HistoricVariable variable.HistoricVariable
 }
 

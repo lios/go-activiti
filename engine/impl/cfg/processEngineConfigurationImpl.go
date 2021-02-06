@@ -1,10 +1,10 @@
 package cfg
 
 import (
-	"github.com/lios/go-activiti/engine"
-	"github.com/lios/go-activiti/engine/impl/bpmn/parse"
+	. "github.com/lios/go-activiti/engine"
+	. "github.com/lios/go-activiti/engine/event"
+	"github.com/lios/go-activiti/engine/impl/bpmn/parse/handler"
 	"github.com/lios/go-activiti/engine/interceptor"
-	. "github.com/lios/go-activiti/event"
 )
 
 var processEngineConfiguration ProcessEngineConfigurationImpl
@@ -17,9 +17,11 @@ type ProcessEngineConfigurationImpl struct {
 	CommandExecutor       interceptor.CommandExecutor
 	CommandContextFactory interceptor.CommandContextFactory
 	EventDispatcher       ActivitiEventDispatcher
-	PostBpmnParseHandlers []parse.BpmnParseHandler
+	PostBpmnParseHandlers []handler.BpmnParseHandler
 
-	RuntimeService engine.RuntimeService
+	RuntimeService    RuntimeService
+	RepositoryService RepositoryServiceImpl
+	TaskService       TaskServiceImpl
 }
 
 func GetProcessEngineConfiguration() *ProcessEngineConfigurationImpl {
@@ -62,7 +64,7 @@ func getDefaultCommandInterceptors() []interceptor.CommandInterceptor {
 	return interceptors
 }
 func initCommandInvoker() {
-	commandInvoker := interceptor.CommandInvoker{}
+	commandInvoker := interceptor.GetCommandInvoker()
 	processEngineConfiguration.CommandInvoker = &commandInvoker
 }
 
@@ -77,6 +79,7 @@ func initCommandExecutor() {
 		first := initInterceptorChain(processEngineConfiguration.CommandInterceptors)
 		commandExecutor := CommandExecutorImpl{First: first}
 		processEngineConfiguration.CommandExecutor = commandExecutor
+		SetCommandExecutorImpl(commandExecutor)
 	}
 }
 
@@ -91,6 +94,10 @@ func initService() {
 	processEngineConfiguration.Service = serviceImpl
 
 	processEngineConfiguration.RuntimeService = RuntimeServiceImpl{}
+
+	processEngineConfiguration.RepositoryService = RepositoryServiceImpl{}
+
+	processEngineConfiguration.TaskService = TaskServiceImpl{}
 }
 
 func initInterceptorChain(interceptors []interceptor.CommandInterceptor) interceptor.CommandInterceptor {
@@ -106,7 +113,7 @@ func initInterceptorChain(interceptors []interceptor.CommandInterceptor) interce
 func initCommandContextFactory() {
 	factory := interceptor.CommandContextFactory{}
 	processEngineConfiguration.CommandContextFactory = factory
-	interceptor.SetProcessEngineConfiguration(processEngineConfiguration)
+	//interceptor.SetProcessEngineConfiguration(processEngineConfiguration)
 }
 
 func initEventDispatcher() {
@@ -120,9 +127,10 @@ func initEventDispatcher() {
 		}
 	}
 	processEngineConfiguration.EventDispatcher = eventDispatcher
+	SetAtivitiEventDispatcher(eventDispatcher)
 	SetEventDispatcher(eventDispatcher)
 }
 
-func (processEngineConfiguration ProcessEngineConfigurationImpl) GetRuntimeService() engine.RuntimeService {
+func (processEngineConfiguration ProcessEngineConfigurationImpl) GetRuntimeService() RuntimeService {
 	return processEngineConfiguration.RuntimeService
 }

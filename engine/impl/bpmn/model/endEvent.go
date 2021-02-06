@@ -3,6 +3,6 @@ package model
 import "encoding/xml"
 
 type EndEvent struct {
-	*Flow
+	*FlowNode
 	EndEventName xml.Name `xml:"endEvent"`
 }

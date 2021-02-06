@@ -7,7 +7,7 @@ import (
 )
 
 type HistoricProcessDataManager struct {
-	AbstractDataManager
+	DataManagers
 	HistoricProcess HistoricProcess
 }
 

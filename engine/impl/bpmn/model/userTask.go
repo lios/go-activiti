@@ -3,7 +3,7 @@ package model
 import "encoding/xml"
 
 type UserTask struct {
-	*Flow
+	*FlowNode
 	UserTaskName      xml.Name                         `xml:"userTask"`
 	Assignee          string                           `xml:"assignee,attr"`
 	CandidateUsers    []string                         `xml:"candidateUsers,attr"`

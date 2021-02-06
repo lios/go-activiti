@@ -1,15 +1,14 @@
 package behavior
 
 import (
-	. "github.com/lios/go-activiti/engine/common"
+	. "github.com/lios/go-activiti/engine/contanst"
+	"github.com/lios/go-activiti/engine/event"
+	. "github.com/lios/go-activiti/engine/event/impl"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
-	"github.com/lios/go-activiti/engine/impl/context"
 	. "github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/engine/impl/invocation"
 	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
-	"github.com/lios/go-activiti/event"
-	. "github.com/lios/go-activiti/event/impl"
 	. "github.com/lios/go-activiti/model"
 	"time"
 )
@@ -36,12 +35,12 @@ func (user UserTaskActivityBehavior) Execute(execution entity.ExecutionEntity) (
 	err = handleAssignments(user.UserTask, task.Id, task.ProcessInstanceId)
 
 	// All properties set, now firing 'create' events
-	if interceptor.GetProcessEngineConfiguration().EventDispatcher.IsEnabled() {
+	if event.GetAtivitiEventDispatcher().IsEnabled() {
 		activitiEntityEvent, err := CreateEntityEvent(event.TASK_CREATED, task)
 		if err != nil {
 			return err
 		}
-		interceptor.GetProcessEngineConfiguration().EventDispatcher.DispatchEvent(activitiEntityEvent)
+		event.GetAtivitiEventDispatcher().DispatchEvent(activitiEntityEvent)
 	}
 	extensionElements := user.UserTask.ExtensionElements
 	if extensionElements.TaskListener != nil && len(extensionElements.TaskListener) > 0 {

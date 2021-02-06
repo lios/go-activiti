@@ -1,7 +1,7 @@
 package cfg
 
 import (
-	"github.com/lios/go-activiti/engine/impl/cmd"
+	. "github.com/lios/go-activiti/engine/impl/cmd"
 	"github.com/lios/go-activiti/engine/task"
 	. "github.com/lios/go-activiti/model"
 )
@@ -12,7 +12,7 @@ type TaskServiceImpl struct {
 
 //查询待审批任务
 func (taskService TaskServiceImpl) QueryUndoTask(userId, groupId string) ([]task.TaskInfo, error) {
-	exe, err := taskService.GetCommandExecutor().Exe(cmd.GetTaskCmd{UserId: userId, GroupId: groupId})
+	exe, err := taskService.GetCommandExecutor().Exe(GetTaskCmd{UserId: userId, GroupId: groupId})
 	if err != nil {
 		return nil, err
 	}
@@ -24,9 +24,9 @@ func (taskService TaskServiceImpl) QueryUndoTask(userId, groupId string) ([]task
 }
 
 //流程审批完成
-func (taskService TaskServiceImpl) Complete(taskId int, variables map[string]interface{}, localScope bool) (Task, error) {
+func (taskService TaskServiceImpl) Complete(taskId int64, variables map[string]interface{}, localScope bool) (Task, error) {
 	var task Task
-	exe, err := taskService.GetCommandExecutor().Exe(cmd.CompleteCmd{TaskId: taskId, Variables: variables, LocalScope: localScope})
+	exe, err := taskService.GetCommandExecutor().Exe(CompleteCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{TaskId: taskId}, Variables: variables, LocalScope: localScope})
 	if err != nil {
 		return task, err
 	}
@@ -34,8 +34,8 @@ func (taskService TaskServiceImpl) Complete(taskId int, variables map[string]int
 }
 
 //查询待审批任务
-func (taskService TaskServiceImpl) BackTask(taskId int, targetFlowId string) (bool, error) {
-	exe, err := taskService.GetCommandExecutor().Exe(cmd.BackTaskCmd{TaskId: taskId, TargetFlowId: targetFlowId})
+func (taskService TaskServiceImpl) BackTask(taskId int64, targetFlowId string) (bool, error) {
+	exe, err := taskService.GetCommandExecutor().Exe(BackTaskCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{TaskId: taskId}, TargetFlowId: targetFlowId})
 	if err != nil {
 		return false, err
 	}

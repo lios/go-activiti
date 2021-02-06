@@ -5,7 +5,7 @@ import (
 )
 
 type ParsedDeploymentBuilderFactory struct {
-	BpmnParser *BpmnParse
+	BpmnParser *BpmnParser
 }
 
 func (parsedDeploymentBuilderFactory ParsedDeploymentBuilderFactory) GetBuilderForDeploymentAndSettings(deployment entity.DeploymentEntity, deploymentSettings map[string]interface{}) ParsedDeploymentBuilder {

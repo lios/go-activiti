@@ -1,4 +1,6 @@
 package entity
 
-type IdentityLinkEntity struct {
+type IdentityLinkEntity interface {
+	Entity
+	SetType(types string)
 }

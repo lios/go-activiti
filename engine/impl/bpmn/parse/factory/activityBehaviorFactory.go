@@ -7,4 +7,6 @@ import (
 
 type ActivityBehaviorFactory interface {
 	CreateUserTaskActivityBehavior(userTask model.UserTask) behavior.UserTaskActivityBehavior
+
+	//CreateUserTaskActivityBehavior(userTask model.StartEvent) behavior.S
 }

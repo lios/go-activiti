@@ -1,7 +1,7 @@
 ## Go语言流程引擎go-activiti
 项目传送门[go-activiti](https://github.com/lios/go-activiti)
 
-参考[Activiti](https://github.com/Activiti/Activiti)实现，满足部分功能。项目还在完善中，欢迎activiti爱好者加入，Go语言她不香么。
+参考[Activiti](https://github.com/Activiti/Activiti)实现，满足部分功能。项目还在完善中，欢迎activiti爱好者加入。
 	
 
 现有能力

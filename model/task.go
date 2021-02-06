@@ -5,6 +5,7 @@ import (
 )
 
 type Task struct {
+	TableModel
 	Id                int64
 	TaskDefineKey     string    `gorm:"column:task_define_key"`
 	TaskDefineName    string    `gorm:"column:task_define_name"`
@@ -16,5 +17,9 @@ type Task struct {
 }
 
 func (Task) TableName() string {
+	return "task"
+}
+
+func (tableModel TableModel) getTableName() string {
 	return "task"
 }

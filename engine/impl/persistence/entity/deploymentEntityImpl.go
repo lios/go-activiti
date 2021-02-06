@@ -10,14 +10,14 @@ type DeploymentEntityImpl struct {
 	TenantId       string
 	DeploymentTime time.Time
 	IsNew          bool
-	ResourceEntity map[string]ResourceEntity
+	ResourceEntity ResourceEntity
 }
 
 func (deploymentEntity DeploymentEntityImpl) AddResource(resource ResourceEntity) {
-	deploymentEntity.ResourceEntity[GetName()] = resource
+	deploymentEntity.ResourceEntity = resource
 }
 
-func (deploymentEntity DeploymentEntityImpl) GetResources() map[string]ResourceEntity {
+func (deploymentEntity DeploymentEntityImpl) GetResources() ResourceEntity {
 	return deploymentEntity.ResourceEntity
 }
 
@@ -37,8 +37,8 @@ func (deploymentEntity DeploymentEntityImpl) SetTenantId(tenantId string) {
 
 }
 
-func (deploymentEntity DeploymentEntityImpl) SetResources(map[string]ResourceEntity) {
-
+func (deploymentEntity DeploymentEntityImpl) SetResources(resourceEntity ResourceEntity) {
+	deploymentEntity.ResourceEntity = resourceEntity
 }
 
 func (deploymentEntity DeploymentEntityImpl) SetDeploymentTime(deploymentTime time.Time) {

@@ -7,6 +7,7 @@ import (
 var dataManager DataManager
 
 type DataManager struct {
+	DeploymentDataManager           *DeploymentDataManager
 	DefineDataManager               *DefineDataManager
 	HistoricActinstDataManager      *HistoricActinstDataManager
 	HistoricIdentityLinkDataManager *HistoricIdentityLinkDataManager
@@ -25,6 +26,9 @@ func init() {
 }
 
 func initDataManagers() {
+	if dataManager.DefineDataManager == nil {
+		dataManager.DefineDataManager = &DefineDataManager{}
+	}
 	if dataManager.DefineDataManager == nil {
 		dataManager.DefineDataManager = &DefineDataManager{}
 	}

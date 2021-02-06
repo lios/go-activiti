@@ -2,10 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/lios/go-activiti/engine/behavior"
-	_ "github.com/lios/go-activiti/engine/handler"
-	peocess "github.com/lios/go-activiti/engine/service"
-	"github.com/lios/go-activiti/event"
+	"github.com/lios/go-activiti/engine/event"
+	"github.com/lios/go-activiti/engine/impl/cfg"
+	"github.com/lios/go-activiti/engine/impl/converter"
+	_ "github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/runtime"
 	"io/ioutil"
 	"os"
@@ -19,10 +19,15 @@ const (
 	file_path   = "F:\\Work\\go-activiti\\resources\\userAuto.bpmn20.xml"
 )
 
+var processEngineConfiguration cfg.ProcessEngineConfigurationImpl
+
 type ActivitiListener struct {
 	name string
 }
 
+func init() {
+	processEngineConfiguration = cfg.ProcessEngineConfigurationImpl{}
+}
 func (act ActivitiListener) OnEvent(event event.ActivitiEvent) error {
 	fmt.Println(event)
 	return nil
@@ -34,7 +39,7 @@ func TestDeployMentProcss(t *testing.T) {
 	if err == nil {
 		bytes, err := ioutil.ReadAll(f)
 		if err == nil {
-			repository := peocess.RepositoryService{}
+			repository := processEngineConfiguration.RepositoryService
 			repository.Deploy(userAutoKey, userAutoKey, bytes)
 		}
 	}
@@ -47,7 +52,8 @@ func TestConverterBpmn(t *testing.T) {
 	if err == nil {
 		bytes, err := ioutil.ReadAll(f)
 		if err == nil {
-			process := behavior.Converter(bytes)
+			bpmnXMLConverter := converter.BpmnXMLConverter{}
+			process := bpmnXMLConverter.ConvertToBpmnModel(bytes)
 			fmt.Println(process)
 		}
 	}
@@ -60,7 +66,7 @@ func TestStartProcss(t *testing.T) {
 	variables["name"] = "lisi"
 	variables["age"] = 18
 	variables["isOld"] = true
-	runtime := peocess.RuntimeService{}
+	runtime := processEngineConfiguration.RuntimeService
 	runtime.StartProcessInstanceByKey(userKey, variables, "", "")
 }
 
@@ -70,13 +76,13 @@ func TestStartAutoProcss(t *testing.T) {
 	variables["name"] = "lisi"
 	variables["age"] = 18
 	variables["isOld"] = true
-	runtime := peocess.RuntimeService{}
+	runtime := processEngineConfiguration.RuntimeService
 	runtime.StartProcessInstanceByKey(userAutoKey, variables, "", "")
 }
 
 //测试查询代办
 func TestQueryUndoTask(t *testing.T) {
-	taskService := peocess.TaskService{}
+	taskService := processEngineConfiguration.TaskService
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
 	taskEntities, _ := taskService.QueryUndoTask("lisi", "")
@@ -85,7 +91,7 @@ func TestQueryUndoTask(t *testing.T) {
 
 //测试完成任务
 func TestComplete(t *testing.T) {
-	taskService := peocess.TaskService{}
+	taskService := processEngineConfiguration.TaskService
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
 	taskService.Complete(38, variables, true)
@@ -93,7 +99,7 @@ func TestComplete(t *testing.T) {
 
 //测试驳回
 func TestBackTask(t *testing.T) {
-	taskService := peocess.TaskService{}
+	taskService := processEngineConfiguration.TaskService
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
 	taskService.BackTask(26, "sid-4D05C44F-097D-4182-AD76-F4CC40F0F5F5")
@@ -107,10 +113,9 @@ func TestRuntime(t *testing.T) {
 
 //测试监听器
 func TestListener(t *testing.T) {
-	configuration := behavior.GetProcessEngineConfiguration()
 	eventListeners := make([]event.ActivitiEventListener, 0)
 	eventListeners = append(eventListeners, ActivitiListener{})
-	configuration.AddEventListeners(eventListeners)
-	taskService := peocess.TaskService{}
+	processEngineConfiguration.AddEventListeners(eventListeners)
+	taskService := processEngineConfiguration.TaskService
 	taskService.Complete(7, nil, true)
 }

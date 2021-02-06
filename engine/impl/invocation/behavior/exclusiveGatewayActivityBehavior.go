@@ -1,7 +1,9 @@
 package behavior
 
 import (
+	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/invocation"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/utils"
 )
@@ -18,8 +20,8 @@ func (exclusive ExclusiveGatewayActivityBehavior) Execute(execution entity.Execu
 func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution entity.ExecutionEntity) (err error) {
 	element := execution.GetCurrentFlowElement()
 	exclusiveGateway, ok := element.(model.ExclusiveGateway)
-	var outgoingSequenceFlow model.FlowElement
-	var defaultSequenceFlow model.FlowElement
+	var outgoingSequenceFlow bpmn.FlowElement
+	var defaultSequenceFlow bpmn.FlowElement
 	if ok {
 		defaultSequenceFlowId := exclusiveGateway.DefaultFlow
 		sequenceFlowIterator := exclusiveGateway.GetOutgoing()
@@ -45,6 +47,6 @@ func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution entity.Executi
 		}
 	}
 	//执行出口逻辑，设置条件判断
-	interceptor.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
+	invocation.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
 	return nil
 }

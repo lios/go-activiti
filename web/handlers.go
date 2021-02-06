@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/lios/go-activiti/engine"
-	"github.com/lios/go-activiti/engine/behavior"
+	converter2 "github.com/lios/go-activiti/engine/impl/converter"
+	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/model"
 	"html/template"
 	"io/ioutil"
@@ -44,16 +44,18 @@ func Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	}
 	body, err := ioutil.ReadAll(file)
 	//解析xml数据
-	data := new(engine.Definitions)
-	err = xml.Unmarshal(body, &data)
-	dataStr, err := xml.MarshalIndent(data, "", " ")
-	converter := behavior.Converter(body)
-	defineManager := behavior.GetDefineManager()
-	defineManager.CreateByteArry(converter.Name, converter.Id, string(body))
-	fmt.Println(converter.Id)
+	xmlConverter := converter2.BpmnXMLConverter{}
+	bpmnModel := xmlConverter.ConvertToBpmnModel(body)
+	//data := new(engine.Definitions)
+	//err = xml.Unmarshal(body, &data)
+	//dataStr, err := xml.MarshalIndent(data, "", " ")
+	//converter := behavior.Converter(body)
+	defineManager := manager.GetDataManager().DefineDataManager
+	defineManager.CreateByteArry(bpmnModel.GetMainProcess()[0].Name, bpmnModel.GetMainProcess()[0].Id, string(body))
+	fmt.Println(bpmnModel.GetMainProcess()[0].Id)
 	//导出xml文件
-	headerBytes := []byte(xml.Header)                //加入XML头
-	xmlOutPutData := append(headerBytes, dataStr...) //拼接XML头和实际XML内容
+	headerBytes := []byte(xml.Header)    //加入XML头
+	xmlOutPutData := append(headerBytes) //拼接XML头和实际XML内容
 
 	//设置Content-Type
 	w.Header().Add("Content-Type", "application/octet-stream")

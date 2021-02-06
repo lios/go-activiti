@@ -5,7 +5,7 @@ import "time"
 type DeploymentEntity interface {
 	AddResource(resource ResourceEntity)
 
-	GetResources() map[string]ResourceEntity
+	GetResources() ResourceEntity
 
 	GetName() string
 
@@ -15,7 +15,7 @@ type DeploymentEntity interface {
 
 	SetTenantId(tenantId string)
 
-	SetResources(map[string]ResourceEntity)
+	SetResources(ResourceEntity)
 
 	SetDeploymentTime(deploymentTime time.Time)
 

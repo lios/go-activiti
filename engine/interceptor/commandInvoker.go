@@ -1,9 +1,17 @@
 package interceptor
 
+var commandInvoker CommandInvoker
+
 type CommandInvoker struct {
 	Next CommandInterceptor
 }
 
+func init() {
+	commandInvoker = CommandInvoker{}
+}
+func GetCommandInvoker() CommandInvoker {
+	return commandInvoker
+}
 func (commandInvoker CommandInvoker) Execute(command Command) (result interface{}, err error) {
 	context, err := GetCommandContext()
 	if err != nil {

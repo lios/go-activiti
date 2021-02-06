@@ -1,4 +1,8 @@
 package entity
 
-type TaskEntity struct {
+type TaskEntity interface {
+	Entity
+	GetTaskName() string
+
+	SetExecutionVariables(parameters map[string]interface{}) error
 }

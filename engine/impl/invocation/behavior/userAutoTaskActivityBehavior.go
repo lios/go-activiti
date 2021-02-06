@@ -1,7 +1,7 @@
 package behavior
 
 import (
-	. "github.com/lios/go-activiti/engine/common"
+	. "github.com/lios/go-activiti/engine/contanst"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
 	. "github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/engine/impl/invocation"

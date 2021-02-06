@@ -1,7 +1,9 @@
 package agenda
 
 import (
+	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/invocation"
 	"github.com/lios/go-activiti/engine/impl/utils"
 )
 
@@ -35,7 +37,7 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 		defaultSequenceFlowId = gateway.DefaultFlow
 	}
 	flowElements := currentFlowElement.GetOutgoing()
-	var outgoingSequenceFlows = make([]model.FlowElement, 0)
+	var outgoingSequenceFlows = make([]bpmn.FlowElement, 0)
 	if len(flowElements) > 0 {
 		for _, flowElement := range flowElements {
 			sequenceFlow := (flowElement).(model.SequenceFlow)
@@ -56,14 +58,14 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 
 	if len(outgoingSequenceFlows) == 0 {
 		if flowElements == nil || len(flowElements) == 0 {
-			PlanEndExecutionOperation(execution)
+			invocation.GetAgenda().PlanEndExecutionOperation(execution)
 		} else {
 			panic("No outgoing sequence flow of element")
 		}
 	} else {
 		for _, outgoingExecution := range outgoingSequenceFlows {
 			execution.SetCurrentFlowElement(outgoingExecution)
-			PlanContinueProcessOperation(execution)
+			invocation.GetAgenda().PlanContinueProcessOperation(execution)
 		}
 	}
 	return err
@@ -71,11 +73,11 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 
 //处理连线
 func (task TakeOutgoingSequenceFlowsOperation) handleSequenceFlow() {
-	PlanContinueProcessOperation(task.Execution)
+	invocation.GetAgenda().PlanContinueProcessOperation(task.Execution)
 }
 
 //获取当前活动节点
-func (task TakeOutgoingSequenceFlowsOperation) getCurrentFlowElement() model.FlowElement {
+func (task TakeOutgoingSequenceFlowsOperation) getCurrentFlowElement() bpmn.FlowElement {
 	execution := task.Execution
 	currentFlowElement := execution.GetCurrentFlowElement()
 	if currentFlowElement != nil {
@@ -84,8 +86,8 @@ func (task TakeOutgoingSequenceFlowsOperation) getCurrentFlowElement() model.Flo
 	return nil
 }
 
-func (task TakeOutgoingSequenceFlowsOperation) handleActivityEnd(element model.FlowElement) (err error) {
-	historicActinstManager := GetHistoricActinstManager()
-	err = historicActinstManager.RecordTaskCreated(element, task.Execution)
+func (task TakeOutgoingSequenceFlowsOperation) handleActivityEnd(element bpmn.FlowElement) (err error) {
+	//historicActinstManager := manager.DataManager{}.HistoricActinstDataManager
+	//err = historicActinstManager.RecordTaskCreated(element, task.Execution)
 	return err
 }

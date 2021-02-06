@@ -1,16 +1,16 @@
 package entity
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/variable"
 )
 
 type ExecutionEntity interface {
 	SetBusinessKey(businessKey string)
 
-	GetCurrentFlowElement() model.FlowElement
+	GetCurrentFlowElement() bpmn.FlowElement
 
-	SetCurrentFlowElement(flow model.FlowElement)
+	SetCurrentFlowElement(flow bpmn.FlowElement)
 
 	GetDeploymentId() int
 

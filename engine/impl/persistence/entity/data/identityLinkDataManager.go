@@ -8,6 +8,7 @@ import (
 )
 
 type IdentityLinkDataManager struct {
+	DataManagers
 	IdentityLink IdentityLink
 }
 
@@ -46,14 +47,14 @@ func (identityLinkManager IdentityLinkDataManager) SelectByTaskId(taskId int64) 
 	return identityLink, errs.ProcessError{Code: "1001", Msg: "Not Find"}
 }
 
-func (identityLinkManager IdentityLinkDataManager) Delete(identityLinkId int64) (err error) {
-	identityLink := IdentityLink{}
-	err = db.DB().Where("id=?", identityLinkId).Delete(&identityLink).Error
-	if err != nil {
-		log.Infoln("Delete identityLink err: ", err)
-	}
-	return err
-}
+//func (identityLinkManager IdentityLinkDataManager) Delete(identityLinkId int64) (err error) {
+//	identityLink := IdentityLink{}
+//	err = db.DB().Where("id=?", identityLinkId).Delete(&identityLink).Error
+//	if err != nil {
+//		log.Infoln("Delete identityLink err: ", err)
+//	}
+//	return err
+//}
 
 func (identityLinkManager IdentityLinkDataManager) createHistoricIdentityLink() (err error) {
 	identityLink := identityLinkManager.IdentityLink

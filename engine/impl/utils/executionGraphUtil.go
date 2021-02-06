@@ -1,14 +1,17 @@
 package utils
 
 import (
+	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
 )
 
 type ExecutionGraphUtil struct {
 }
 
-func IsReachable(process model.Process, sourceElementId string, targetElementId string) bool {
-	sourceFlowElement := process.FlowMap[sourceElementId]
+func IsReachable(processDefinitionId int64, sourceElementId string, targetElementId string) bool {
+	processDefinitionUtil := ProcessDefinitionUtil{}
+	process := processDefinitionUtil.GetProcess("")
+	sourceFlowElement := process.GetFlowElement(sourceElementId)
 	sourceFlow, ok := sourceFlowElement.(model.SequenceFlow)
 	if !ok {
 		element := sourceFlow.GetTargetFlowElement()
@@ -16,19 +19,19 @@ func IsReachable(process model.Process, sourceElementId string, targetElementId 
 		sourceFlow = flow
 	}
 
-	targetFlowElement := process.FlowMap[targetElementId]
+	targetFlowElement := process.GetFlowElement(targetElementId)
 	targetFlow, ok := targetFlowElement.(model.SequenceFlow)
 	if !ok {
 		element := targetFlow.GetTargetFlowElement()
 		flow, _ := (element).(model.SequenceFlow)
 		targetFlow = flow
 	}
-	var visitedElements = make(map[string]model.FlowElement, 0)
+	var visitedElements = make(map[string]bpmn.FlowElement, 0)
 	return isReachable(process, sourceFlow, targetFlow, visitedElements)
 
 }
 
-func isReachable(process model.Process, sourceElement model.FlowElement, targetElement model.FlowElement, visitedElements map[string]model.FlowElement) bool {
+func isReachable(process model.Process, sourceElement bpmn.FlowElement, targetElement bpmn.FlowElement, visitedElements map[string]bpmn.FlowElement) bool {
 	if sourceElement.GetId() == targetElement.GetId() {
 		return true
 	}

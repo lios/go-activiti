@@ -1,15 +1,15 @@
 package utils
 
 import (
-	"github.com/lios/go-activiti/engine"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/persistence/deploy"
 )
 
 type ProcessDefinitionUtil struct {
 }
 
-func (ProcessDefinitionUtil) GetProcess(processDefinitionId string) model.Process {
-	deploymentManager := engine.GetProcessEngineConfiguration().DeploymentManager
-	deployment := deploymentManager.FindDeployedProcessDefinitionById(processDefinitionId)
-	return deploymentManager.ResolveProcessDefinition(deployment).Process
+func (ProcessDefinitionUtil) GetProcess(processDefinitionId int64) model.Process {
+	deploymentManager := deploy.DeploymentManager{}
+	definitionEntity := deploymentManager.FindDeployedProcessDefinitionById(processDefinitionId)
+	return deploymentManager.ResolveProcessDefinition(definitionEntity).Process
 }

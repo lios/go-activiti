@@ -1,5 +1,10 @@
 package parse
 
+import . "github.com/lios/go-activiti/engine/impl/persistence/entity"
+
 type ParsedDeployment struct {
-	BpmnParse *BpmnParse
+	BpmnParse                        BpmnParse
+	ProcessDefinitionEntity          ProcessDefinitionEntity
+	MapProcessDefinitionsToParses    map[ProcessDefinitionEntity]BpmnParse
+	MapProcessDefinitionsToResources map[ProcessDefinitionEntity]ResourceEntity
 }

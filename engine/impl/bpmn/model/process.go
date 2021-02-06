@@ -1,9 +1,12 @@
 package model
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	. "github.com/lios/go-activiti/engine/impl/bpmn"
+)
 
 type Process struct {
-	BaseElement
+	FlowElement
 	ProcessName            xml.Name                 `xml:"process"`
 	Id                     string                   `xml:"id,attr"`
 	Name                   string                   `xml:"name,attr"`
@@ -19,7 +22,16 @@ type Process struct {
 	BoundaryEvent          []BoundaryEvent          `xml:"boundaryEvent"`
 	IntermediateCatchEvent []IntermediateCatchEvent `xml:"intermediateCatchEvent"`
 	SubProcess             []SubProcess             `xml:"subProcess"`
-	Flow                   []FlowElement
+	FlowElementList        []FlowElement
 	InitialFlowElement     FlowElement
-	FlowMap                map[string]FlowElement
+	FlowElementMap         map[string]FlowElement
+}
+
+func (process Process) GetFlowElement(flowElementId string) FlowElement {
+	return process.FlowElementMap[flowElementId]
+}
+
+func (process Process) AddFlowElement(element FlowElement) {
+	process.FlowElementList = append(process.FlowElementList, element)
+	process.FlowElementMap[element.GetId()] = element
 }

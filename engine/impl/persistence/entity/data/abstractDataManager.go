@@ -1,19 +1,53 @@
 package data
 
-type AbstractDataManager interface {
-	GetTaskEntityManager() TaskDataManager
+import (
+	"github.com/lios/go-activiti/db"
+	"github.com/lios/go-activiti/model"
+)
 
-	GetDefineEntityManager() DefineDataManager
+type AbstractDataManager struct {
+	model.TableModel
+	//GetTaskEntityManager() TaskDataManager
+	//
+	//GetDefineEntityManager() DefineDataManager
+	//
+	//GetDeploymentDataManager() DeploymentDataManager
+	//
+	//GetVariableEntityManager() VariableDataManager
+	//
+	//GetIdentityLinkEntityManager() IdentityLinkDataManager
+	//
+	//GetHistoricActinstEntityManager() HistoricActinstDataManager
+	//
+	//GetHistoricTaskEntityManager() HistoricTaskDataManager
+	//
+	//GetHistoricProcessEntityManager() HistoricProcessDataManager
+	//
+	//GetResourceDataManager() ResourceDataManager
+}
 
-	GetVariableEntityManager() VariableDataManager
+func (dataManagers AbstractDataManager) Insert(data interface{}) error {
+	err := db.DB().Create(data).Error
+	if err == nil {
+		return err
+	}
+	return err
+}
 
-	GetIdentityLinkEntityManager() IdentityLinkDataManager
-
-	GetHistoricActinstEntityManager() HistoricActinstDataManager
-
-	GetHistoricTaskEntityManager() HistoricTaskDataManager
-
-	GetHistoricProcessEntityManager() HistoricProcessDataManager
+func (dataManagers AbstractDataManager) FindById(id int64, data interface{}) error {
+	err := db.DB().Where("id = ?", id).Find(data).Error
+	if err == nil {
+		return err
+	}
+	return err
+}
+func (dataManagers AbstractDataManager) Delete(id int64) error {
+	tableName := dataManagers.GetTableName()
+	err := db.DB().Where("id = ?", id).Table(tableName).Error
+	if err == nil {
+		return err
+	}
+	return err
 }
 
 //var dataManager DataManager

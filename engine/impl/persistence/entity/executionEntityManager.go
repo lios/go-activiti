@@ -1,5 +1,5 @@
 package entity
 
 type ExecutionEntityManager interface {
-	FindById(entityId string) ExecutionEntity
+	FindById(entityId int64) ExecutionEntity
 }

@@ -8,6 +8,7 @@ import (
 )
 
 type ProcessInstanceDataManager struct {
+	DataManagers
 	Instance *ProcessInstance
 }
 

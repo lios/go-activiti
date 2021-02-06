@@ -1,9 +1,7 @@
 package delegate
 
-import (
-	"github.com/lios/go-activiti/engine/impl/persistence/entity"
-)
+import "github.com/lios/go-activiti/engine/delegate"
 
 type ActivityBehavior interface {
-	Execute(execution entity.ExecutionEntity) error
+	Execute(execution delegate.DelegateExecution) error
 }

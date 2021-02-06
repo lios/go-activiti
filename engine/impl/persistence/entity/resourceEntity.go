@@ -9,7 +9,7 @@ type ResourceEntity interface {
 
 	SetBytes(bytes []byte)
 
-	GetDeploymentId() string
+	GetDeploymentId() int64
 
-	SetDeploymentId(deploymentId string)
+	SetDeploymentId(deploymentId int64)
 }

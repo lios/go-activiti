@@ -14,6 +14,6 @@ type DeploymentCmd struct {
 
 func (deploy DeploymentCmd) Execute(interceptor interceptor.CommandContext) (interface{}, error) {
 	deploymentManager := data.DeploymentDataManager{}
-	err := deploymentManager.Deployment(deploy.Name, deploy.Key, deploy.Bytes)
+	err := deploymentManager.Deployments(deploy.Name, deploy.Key, deploy.Bytes)
 	return nil, err
 }

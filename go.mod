@@ -12,4 +12,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/pborman/uuid v1.2.0
 	github.com/prometheus/common v0.13.0
+	github.com/sirupsen/logrus v1.7.0
+	github.com/smartystreets/goconvey v1.6.4
+	github.com/spf13/viper v1.6.2
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

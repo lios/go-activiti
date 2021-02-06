@@ -5,6 +5,6 @@ import (
 )
 
 type HistoricIdentityLinkDataManager struct {
-	AbstractDataManager
+	DataManagers
 	HistoricIdentityLink model.HistoricIdentityLink
 }

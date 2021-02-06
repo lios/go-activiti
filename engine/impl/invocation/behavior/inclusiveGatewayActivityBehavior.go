@@ -23,15 +23,10 @@ func (exclusive InclusiveGatewayActivityBehavior) Leave(execution entity.Executi
 	tasks, errS := taskManager.FindByProcessInstanceId(processInstanceId)
 	var oneExecutionCanReachGateway = false
 	if errS != nil {
-		bytearry, err := manager.GetDataManager().DefineDataManager.GetBytearry(execution.GetProcessDefineId())
-		if err != nil {
-			return err
-		}
-		process := GetBpmn(bytearry)
 		for _, task := range tasks {
 			if task.TaskDefineKey != execution.GetCurrentActivityId() {
 				//判断是否可以继续执行
-				oneExecutionCanReachGateway = utils.IsReachable(process, task.TaskDefineKey, execution.GetCurrentActivityId())
+				oneExecutionCanReachGateway = utils.IsReachable(execution.GetProcessDefineId(), task.TaskDefineKey, execution.GetCurrentActivityId())
 			} else {
 				oneExecutionCanReachGateway = true
 			}

@@ -3,14 +3,10 @@ package db
 import (
 	"errors"
 	"fmt"
-	"github.com/Unknwon/goconfig"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"github.com/lios/go-activiti/common"
 	"github.com/lios/go-activiti/runtime"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"strings"
 	"sync"
 )
 
@@ -25,36 +21,9 @@ var ROOT string
 const mainIniPath = "/conf/activiti.properties"
 
 func init() {
-	curFilename := os.Args[0]
-	binaryPath, err := exec.LookPath(curFilename)
-	if err != nil {
-		panic(err)
-	}
-
-	binaryPath, err = filepath.Abs(binaryPath)
-	if err != nil {
-		panic(err)
-	}
-
-	ROOT = filepath.Dir(filepath.Dir(binaryPath))
-
-	configPath := ROOT + mainIniPath
-
-	if !fileExist(configPath) {
-		curDir, _ := os.Getwd()
-		pos := strings.LastIndex(curDir, "src")
-		if pos == -1 {
-			// panic("can't find " + mainIniPath)
-			fmt.Println("can't find " + mainIniPath)
-		} else {
-			ROOT = curDir[:pos]
-
-			configPath = ROOT + mainIniPath
-		}
-	}
-	configFile, err := goconfig.LoadConfigFile(configPath)
-	if err != nil {
-		panic(err)
+	configFile := common.ReadConfig(mainIniPath)
+	if configFile == nil {
+		panic("err")
 	}
 	TXDB = new(sync.Map)
 	mysqlConfig, err := configFile.GetSection("mysql")
@@ -113,8 +82,4 @@ func DB() *gorm.DB {
 		panic("TXDB not init")
 	}
 	return db.(*gorm.DB)
-}
-func fileExist(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil || os.IsExist(err)
 }

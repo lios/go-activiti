@@ -5,34 +5,66 @@ import (
 )
 
 type TaskEntityImpl struct {
-	AbstractEntityManager
+	AbstractEntity
 	ExecutionEntityImpl
-	TaskId    int64
-	Variables map[string]interface{}
+	VariableScopeImpl
+	TaskId      int64
+	TaskName    string
+	Variables   map[string]interface{}
+	executionId int64
+	execution   *ExecutionEntityImpl
 }
 
-func (task *TaskEntityImpl) GetTaskId() int64 {
-	return task.TaskId
+func (taskEntiy TaskEntityImpl) GetTaskName() string {
+	return taskEntiy.TaskName
 }
 
-func (task *TaskEntityImpl) SetTaskId(taskId int64) {
-	task.TaskId = taskId
-}
-
-func (task *TaskEntityImpl) GetVariable() map[string]interface{} {
-	variableManager := task.GetVariableEntityManager()
-	variables, err := variableManager.SelectByTaskId(task.TaskId)
+func (taskEntiy TaskEntityImpl) GetById(id int64) Entity {
+	taskEntityImpl := TaskEntityImpl{}
+	task, err := taskDataManager.GetById(id)
 	if err != nil {
-		return task.HandleVariable(variables)
+		return taskEntityImpl
 	}
+	taskEntityImpl.TaskName = task.TaskDefineName
+	return taskEntityImpl
+}
+
+func (taskEntiy TaskEntityImpl) GetTaskId() int64 {
+	return taskEntiy.TaskId
+}
+
+func (taskEntiy TaskEntityImpl) SetTaskId(taskId int64) {
+	taskEntiy.TaskId = taskId
+}
+
+func (taskEntiy TaskEntityImpl) GetVariable() map[string]interface{} {
+	//variableManager := task.GetVariableEntityManager()
+	//variables, err := variableManager.SelectByTaskId(taskEntiy.TaskId)
+	//if err != nil {
+	//	return task.HandleVariable(variables)
+	//}
 	return nil
 }
 
-func (task *TaskEntityImpl) GetSpecificVariable(variableName string) (Variable, error) {
-	variableManager := task.GetVariableEntityManager()
-	return variableManager.SelectTaskId(variableName, task.TaskId)
+func (taskEntiy TaskEntityImpl) GetSpecificVariable(variableName string) (Variable, error) {
+	//variableManager := task.GetVariableEntityManager()
+	//return variableManager.SelectTaskId(variableName, taskEntiy.TaskId)
+	return Variable{}, nil
 }
-
-func (task *TaskEntityImpl) SetScope(variable *Variable) {
-	variable.TaskId = task.TaskId
+func (taskEntiy TaskEntityImpl) getExecution() ExecutionEntity {
+	if taskEntiy.execution == nil && taskEntiy.executionId != 0 {
+		executionEntityManager := GetExecutionEntityManager()
+		entityImpl := executionEntityManager.FindById(taskEntiy.executionId)
+		taskEntiy.execution = &entityImpl
+	}
+	return nil
+}
+func (taskEntiy TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
+	if taskEntiy.getExecution() != nil {
+		taskEntiy.execution.SetVariableLocal(variables)
+	}
+	return nil
+}
+func (taskEntiy TaskEntityImpl) SetScope(variable *Variable) {
+	variable.TaskId = taskEntiy.TaskId
 }

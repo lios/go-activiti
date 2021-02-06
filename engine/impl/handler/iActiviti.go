@@ -1,7 +1,7 @@
 package handler
 
 import (
-	. "github.com/lios/go-activiti/engine/common"
+	. "github.com/lios/go-activiti/engine/contanst"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/errs"
 	"reflect"

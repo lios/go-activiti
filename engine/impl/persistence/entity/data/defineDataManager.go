@@ -21,9 +21,9 @@ func (DefineDataManager) GetDefineEntityManager() DefineDataManager {
 	return defineDataManager
 }
 
-func (define DefineDataManager) FindDeployedProcessDefinitionByKey(key string) ([]*Bytearry, error) {
-	bytearries := make([]*Bytearry, 0)
-	err := db.DB().Where("`key`=?", key).Where("deployment_id != 0").Order("version DESC", true).Find(&bytearries).Error
+func (define DefineDataManager) FindDeployedProcessDefinitionByKey(key string) (Bytearry, error) {
+	bytearries := Bytearry{}
+	err := db.DB().Where("`key`=?", key).Where("deployment_id != 0").Order("version DESC", true).First(&bytearries).Error
 	return bytearries, err
 }
 
@@ -38,15 +38,13 @@ func (define DefineDataManager) GetBytearry(processDefineId int64) (Bytearry, er
 }
 
 func (define DefineDataManager) CreateByteArry(name string, key string, bytes string) error {
-	bytearries, err := define.FindDeployedProcessDefinitionByKey(key)
+	bytearry, err := define.FindDeployedProcessDefinitionByKey(key)
 	if err != nil {
 		return err
 	}
 	var verion = 0
-	if bytearries != nil && len(bytearries) > 0 {
-		verion = bytearries[0].Version
-		verion++
-	}
+	verion = bytearry.Version
+	verion++
 	byteArry := Bytearry{Name: name, Bytes: bytes, Key: key, Version: verion}
 	err = db.DB().Create(&byteArry).Error
 	if err != nil {

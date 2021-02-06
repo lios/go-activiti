@@ -8,7 +8,9 @@ import (
 )
 
 type VariableDataManager struct {
-	Variable *Variable
+	Variable
+	AbstractDataManager
+	VariableModel *Variable
 }
 
 func (define VariableDataManager) Create(name string, variableType VariableType, value interface{}) *Variable {
@@ -19,16 +21,6 @@ func (define VariableDataManager) Create(name string, variableType VariableType,
 	variable.SetValue(value, variableType)
 	return &variable
 
-}
-
-func (defineManager VariableDataManager) Insert() (err error) {
-	err = db.DB().Create(&defineManager.Variable).Error
-	if err != nil {
-		log.Infoln("Create Variable Error", err)
-		return err
-	}
-	err = defineManager.createHistoricVariable()
-	return err
 }
 
 func (defineManager VariableDataManager) createHistoricVariable() (err error) {

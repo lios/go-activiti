@@ -6,22 +6,24 @@ import (
 
 type ParsedDeploymentBuilder struct {
 	deployment         entity.DeploymentEntity
-	bpmnParser         *BpmnParse
+	bpmnParser         *BpmnParser
 	deploymentSettings map[string]interface{}
 }
 
-func NewParsedDeploymentBuilder(deployment entity.DeploymentEntity, bpmnParser *BpmnParse, deploymentSettings map[string]interface{}) ParsedDeploymentBuilder {
+func NewParsedDeploymentBuilder(deployment entity.DeploymentEntity, bpmnParser *BpmnParser, deploymentSettings map[string]interface{}) ParsedDeploymentBuilder {
 	return ParsedDeploymentBuilder{deployment, bpmnParser, deploymentSettings}
 }
 
 func (parsedDeploymentBuilder ParsedDeploymentBuilder) Build() ParsedDeployment {
 	resources := parsedDeploymentBuilder.deployment.GetResources()
-	for _, resource := range resources {
-		parsedDeploymentBuilder.createBpmnParseFromResource(resource)
-	}
-	return ParsedDeployment{parsedDeploymentBuilder.bpmnParser}
+	bpmnParse := parsedDeploymentBuilder.createBpmnParseFromResource(resources)
+	return ParsedDeployment{BpmnParse: bpmnParse}
 }
 
-func (parsedDeploymentBuilder ParsedDeploymentBuilder) createBpmnParseFromResource(resource entity.ResourceEntity) {
-	parsedDeploymentBuilder.bpmnParser.Execute()
+func (parsedDeploymentBuilder ParsedDeploymentBuilder) createBpmnParseFromResource(resource entity.ResourceEntity) BpmnParse {
+	name := resource.GetName()
+	bytes := resource.GetBytes()
+	bpmnParse := parsedDeploymentBuilder.bpmnParser.CreateParse().SourceInputStream(bytes).Deployment(parsedDeploymentBuilder.deployment).SourceName(name)
+	bpmnParse.Execute()
+	return bpmnParse
 }

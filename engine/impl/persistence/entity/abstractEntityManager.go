@@ -1,19 +1,35 @@
 package entity
 
-import . "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+type AbstractEntityManager struct {
+	EntityManager
 
-type AbstractEntityManager interface {
-	GetTaskEntityManager() TaskDataManager
+	//GetTaskEntityManager() TaskDataManager
+	//
+	//GetDefineEntityManager() DefineDataManager
+	//
+	//GetDeploymentDataManager() DeploymentDataManager
+	//
+	//GetVariableEntityManager() VariableDataManager
+	//
+	//GetIdentityLinkEntityManager() IdentityLinkDataManager
+	//
+	//GetHistoricActinstEntityManager() HistoricActinstDataManager
+	//
+	//GetHistoricTaskEntityManager() HistoricTaskDataManager
+	//
+	//GetHistoricProcessEntityManager() HistoricProcessDataManager
+	//
+	//GetResourceDataManager() ResourceDataManager
+}
 
-	GetDefineEntityManager() DefineDataManager
+func (entityManager AbstractEntityManager) Insert(data interface{}) error {
+	return entityManager.GetDataManager().Insert(data)
+}
 
-	GetVariableEntityManager() VariableDataManager
+func (entityManager AbstractEntityManager) GetById(id int64) Entity {
+	return AbstractEntity{}
+}
 
-	GetIdentityLinkEntityManager() IdentityLinkDataManager
-
-	GetHistoricActinstEntityManager() HistoricActinstDataManager
-
-	GetHistoricTaskEntityManager() HistoricTaskDataManager
-
-	GetHistoricProcessEntityManager() HistoricProcessDataManager
+func (entityManager AbstractEntityManager) Delete(entity Entity) {
+	entityManager.GetDataManager().Delete(entity.GetId())
 }
