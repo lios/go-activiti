@@ -3,8 +3,11 @@ package cfg
 import (
 	. "github.com/lios/go-activiti/engine"
 	. "github.com/lios/go-activiti/engine/event"
-	"github.com/lios/go-activiti/engine/impl/bpmn/parse/handler"
-	"github.com/lios/go-activiti/engine/interceptor"
+	. "github.com/lios/go-activiti/engine/impl/bpmn/parse"
+	. "github.com/lios/go-activiti/engine/impl/bpmn/parse/deployer"
+	. "github.com/lios/go-activiti/engine/impl/bpmn/parse/factory"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
+	. "github.com/lios/go-activiti/engine/impl/persistence/deploy"
 )
 
 var processEngineConfiguration ProcessEngineConfigurationImpl
@@ -17,11 +20,20 @@ type ProcessEngineConfigurationImpl struct {
 	CommandExecutor       interceptor.CommandExecutor
 	CommandContextFactory interceptor.CommandContextFactory
 	EventDispatcher       ActivitiEventDispatcher
-	PostBpmnParseHandlers []handler.BpmnParseHandler
+	PostBpmnParseHandlers []BpmnParseHandler
 
 	RuntimeService    RuntimeService
-	RepositoryService RepositoryServiceImpl
+	RepositoryService RepositoryService
 	TaskService       TaskServiceImpl
+
+	Deployers                      []Deployer
+	BpmnDeployer                   BpmnDeployer
+	BpmnParser                     BpmnParser
+	BpmnParseFactory               BpmnParseFactory
+	ParsedDeploymentBuilderFactory ParsedDeploymentBuilderFactory
+	//BpmnDeploymentHelper BpmnDeploymentHelper
+	DeploymentManager       DeploymentManager
+	ActivityBehaviorFactory ActivityBehaviorFactory
 }
 
 func GetProcessEngineConfiguration() *ProcessEngineConfigurationImpl {
@@ -37,6 +49,8 @@ func init() {
 	initService()
 	initCommandContext(processEngineConfiguration)
 	initEventDispatcher()
+	initBpmnParser()
+	initDeployers()
 }
 
 func initCommandContext(configuration ProcessEngineConfigurationImpl) {
@@ -77,9 +91,9 @@ func initCommandInterceptors() {
 func initCommandExecutor() {
 	if processEngineConfiguration.CommandExecutor == nil {
 		first := initInterceptorChain(processEngineConfiguration.CommandInterceptors)
-		commandExecutor := CommandExecutorImpl{First: first}
+		commandExecutor := interceptor.CommandExecutorImpl{First: first}
 		processEngineConfiguration.CommandExecutor = commandExecutor
-		SetCommandExecutorImpl(commandExecutor)
+		interceptor.SetCommandExecutorImpl(commandExecutor)
 	}
 }
 
@@ -133,4 +147,52 @@ func initEventDispatcher() {
 
 func (processEngineConfiguration ProcessEngineConfigurationImpl) GetRuntimeService() RuntimeService {
 	return processEngineConfiguration.RuntimeService
+}
+func initBpmnParser() {
+	bpmnParser := BpmnParser{}
+	bpmnParseFactory := DefaultBpmnParseFactory{}
+	bpmnParser.BpmnParseFactory = bpmnParseFactory
+	parseHandlers := BpmnParseHandlers{ParseHandlers: make(map[string][]BpmnParseHandler, 0)}
+	parseHandlers.AddHandlers(getDefaultBpmnParseHandlers())
+	bpmnParser.BpmnParserHandlers = parseHandlers
+
+	activityBehaviorFactory := DefaultActivityBehaviorFactory{}
+	bpmnParser.ActivityBehaviorFactory = activityBehaviorFactory
+	processEngineConfiguration.ActivityBehaviorFactory = activityBehaviorFactory
+	processEngineConfiguration.BpmnParser = bpmnParser
+	processEngineConfiguration.BpmnParseFactory = bpmnParseFactory
+}
+
+func getDefaultBpmnParseHandlers() []BpmnParseHandler {
+	handlers := make([]BpmnParseHandler, 0)
+	handlers = append(handlers, ProcessParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(ProcessParseHandler{})}}})
+	handlers = append(handlers, StartEventParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(StartEventParseHandler{})}}})
+	handlers = append(handlers, UserTaskParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(UserTaskParseHandler{})}}})
+	handlers = append(handlers, SequenceFlowParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(SequenceFlowParseHandler{})}}})
+
+	return handlers
+}
+func initDeployers() {
+	for _, deployer := range getDefaultDeployers() {
+		processEngineConfiguration.Deployers = append(processEngineConfiguration.Deployers, deployer)
+	}
+	deploymentManager := DeploymentManager{}
+	deploymentManager.Deployers = processEngineConfiguration.Deployers
+	SetDeploymentManager(deploymentManager)
+	processEngineConfiguration.DeploymentManager = deploymentManager
+}
+
+func getDefaultDeployers() []Deployer {
+	defaultDeployers := make([]Deployer, 0)
+	bpmnDeployer := BpmnDeployer{}
+	initBpmnDeployerDependencies()
+	bpmnDeployer.ParsedDeploymentBuilderFactory = processEngineConfiguration.ParsedDeploymentBuilderFactory
+	processEngineConfiguration.BpmnDeployer = bpmnDeployer
+	defaultDeployers = append(defaultDeployers, bpmnDeployer)
+	return defaultDeployers
+}
+func initBpmnDeployerDependencies() {
+	parsedDeploymentBuilderFactory := ParsedDeploymentBuilderFactory{}
+	parsedDeploymentBuilderFactory.BpmnParser = &processEngineConfiguration.BpmnParser
+	processEngineConfiguration.ParsedDeploymentBuilderFactory = parsedDeploymentBuilderFactory
 }

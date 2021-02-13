@@ -1,7 +1,9 @@
 package cmd
 
 import (
-	"github.com/lios/go-activiti/engine/interceptor"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 )
 
 type GetTaskCmd struct {
@@ -10,8 +12,9 @@ type GetTaskCmd struct {
 }
 
 func (getTaskCmd GetTaskCmd) Execute(interceptor interceptor.CommandContext) (interface{}, error) {
-	manager := interceptor.ProcessEngineConfiguration.TaskDataManager
-	taskResult, err := manager.QueryUndoTask(getTaskCmd.UserId, getTaskCmd.GroupId)
+	dataManager := entity.GetTaskEntityManager().GetDataManager()
+	taskDataManager := dataManager.(data.TaskDataManager)
+	taskResult, err := taskDataManager.QueryUndoTask(getTaskCmd.UserId, getTaskCmd.GroupId)
 	if err != nil {
 		return taskResult, err
 	}

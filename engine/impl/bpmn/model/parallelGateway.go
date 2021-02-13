@@ -1,5 +1,9 @@
 package model
 
 type ParallelGateway struct {
-	*Gateway
+	Gateway
+}
+
+func (parallelGateway ParallelGateway) GetType() string {
+	return "ParallelGateway"
 }

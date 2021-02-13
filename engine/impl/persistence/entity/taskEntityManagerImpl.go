@@ -1,23 +1,23 @@
 package entity
 
 import (
-	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 )
 
 var (
 	taskEntityImpl  TaskEntityImpl
-	taskDataManager data.TaskDataManager
+	taskDataManager TaskDataManager
 )
 
 type TaskEntityManagerImpl struct {
 	AbstractEntityManager
 }
 
-func (taskEntityManager TaskEntityManagerImpl) GetDataManager() data.DataManagers {
+func (taskEntityManager TaskEntityManagerImpl) GetDataManager() DataManagers {
 	return taskDataManager
 }
 func (taskEntityManager TaskEntityManagerImpl) DeleteTask(task TaskEntity) (err error) {
-	taskEntityImpl.Delete(task)
+	taskEntityManager.Delete(task)
 	if err != nil {
 		return err
 	}
@@ -38,4 +38,20 @@ func (taskEntityManager TaskEntityManagerImpl) recordTaskEnd(task TaskEntity) (e
 	activityInstanceEntityManager.RecordEnd(task.GetId())
 
 	return nil
+}
+
+func (taskEntityManager TaskEntityManagerImpl) FindByProcessInstanceId(processInstanceId int64) (taskEntity []TaskEntityImpl, err error) {
+	manager := taskEntityManager.GetDataManager()
+	dataManager := manager.(TaskDataManager)
+	tasks, err := dataManager.FindByProcessInstanceId(processInstanceId)
+	if err != nil {
+		return taskEntity, err
+	}
+	taskEntitys := make([]TaskEntityImpl, 0)
+	for _, task := range tasks {
+		taskEntity := TaskEntityImpl{}
+		taskEntity.SetId(task.Id)
+		taskEntitys = append(taskEntitys, taskEntity)
+	}
+	return taskEntitys, nil
 }

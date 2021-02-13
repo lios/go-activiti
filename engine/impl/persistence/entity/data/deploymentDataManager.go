@@ -1,9 +1,10 @@
 package data
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/lios/go-activiti/db"
+	"github.com/lios/go-activiti/logger"
 	. "github.com/lios/go-activiti/model"
-	"github.com/prometheus/common/log"
 	"time"
 )
 
@@ -31,12 +32,12 @@ func (define DeploymentDataManager) Deployments(name string, key string, bytes [
 	deployment := Deployment{Name: name, Key: key, DeployTime: time.Now()}
 	err = db.DB().Create(&deployment).Error
 	if err != nil {
-		log.Infoln("Create deployment err", err)
+		logger.Error("Create deployment err", err)
 		return err
 	}
 	defineManager := DefineDataManager{}
 	bytearry, err := defineManager.FindDeployedProcessDefinitionByKey(key)
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return err
 	}
 	var verion = 0
@@ -45,7 +46,7 @@ func (define DeploymentDataManager) Deployments(name string, key string, bytes [
 	byte := Bytearry{Name: name, Key: key, Bytes: string(bytes), DeploymentId: deployment.Id, Version: verion}
 	err = db.DB().Create(&byte).Error
 	if err != nil {
-		log.Infoln("Create bytearry err", err)
+		logger.Error("Create bytearry err", err)
 		return err
 	}
 	return nil

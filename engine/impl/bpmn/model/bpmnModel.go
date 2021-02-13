@@ -1,13 +1,13 @@
 package model
 
 type BpmnModel struct {
-	processes []*Process
+	Processes []*Process
 }
 
 func (bpmnModel BpmnModel) GetMainProcess() []*Process {
-	return bpmnModel.processes
+	return bpmnModel.Processes
 }
 
-func (bpmnModel BpmnModel) AddProcess(process *Process) {
-	bpmnModel.processes = append(bpmnModel.processes, process)
+func (bpmnModel *BpmnModel) AddProcess(process *Process) {
+	bpmnModel.Processes = append(bpmnModel.Processes, process)
 }

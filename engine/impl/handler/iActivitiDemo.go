@@ -3,21 +3,21 @@ package handler
 import (
 	"fmt"
 	"github.com/lios/go-activiti/engine/contanst"
-	"github.com/lios/go-activiti/engine/impl/persistence/entity"
+	. "github.com/lios/go-activiti/engine/delegate"
 )
 
 func init() {
 	RegisterConstructor("userAuto", NewTestIActiviti)
 }
 
-func NewTestIActiviti(entity entity.ExecutionEntity) IActiviti {
+func NewTestIActiviti(entity DelegateExecution) IActiviti {
 	return &TestIActiviti{
 		Entity: entity,
 	}
 }
 
 type TestIActiviti struct {
-	Entity entity.ExecutionEntity
+	Entity DelegateExecution
 	InPut  string
 	OutPut string
 }

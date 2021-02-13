@@ -1,5 +1,9 @@
 package model
 
 type ExclusiveGateway struct {
-	*Gateway
+	Gateway
+}
+
+func (exclusiveGateway ExclusiveGateway) GetType() string {
+	return "ExclusiveGateway"
 }

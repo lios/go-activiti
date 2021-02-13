@@ -7,6 +7,7 @@ import (
 )
 
 type ExecutionEntityImpl struct {
+	AbstractEntity
 	AbstractEntityManager
 	VariableScopeImpl
 	BusinessKey        string

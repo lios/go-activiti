@@ -1,6 +1,6 @@
 package cfg
 
-import "github.com/lios/go-activiti/engine/interceptor"
+import "github.com/lios/go-activiti/engine/impl/interceptor"
 
 var serviceImpl ServiceImpl
 

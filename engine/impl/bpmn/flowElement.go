@@ -12,4 +12,5 @@ type FlowElement interface {
 	SetTargetFlowElement(f FlowElement)
 	GetSourceFlowElement() FlowElement
 	GetTargetFlowElement() FlowElement
+	GetHandlerType() string
 }

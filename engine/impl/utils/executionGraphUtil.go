@@ -10,20 +10,20 @@ type ExecutionGraphUtil struct {
 
 func IsReachable(processDefinitionId int64, sourceElementId string, targetElementId string) bool {
 	processDefinitionUtil := ProcessDefinitionUtil{}
-	process := processDefinitionUtil.GetProcess("")
+	process := processDefinitionUtil.GetProcess(processDefinitionId)
 	sourceFlowElement := process.GetFlowElement(sourceElementId)
-	sourceFlow, ok := sourceFlowElement.(model.SequenceFlow)
+	sourceFlow, ok := sourceFlowElement.(*model.SequenceFlow)
 	if !ok {
 		element := sourceFlow.GetTargetFlowElement()
-		flow, _ := (element).(model.SequenceFlow)
+		flow, _ := (element).(*model.SequenceFlow)
 		sourceFlow = flow
 	}
 
 	targetFlowElement := process.GetFlowElement(targetElementId)
-	targetFlow, ok := targetFlowElement.(model.SequenceFlow)
+	targetFlow, ok := targetFlowElement.(*model.SequenceFlow)
 	if !ok {
 		element := targetFlow.GetTargetFlowElement()
-		flow, _ := (element).(model.SequenceFlow)
+		flow, _ := (element).(*model.SequenceFlow)
 		targetFlow = flow
 	}
 	var visitedElements = make(map[string]bpmn.FlowElement, 0)

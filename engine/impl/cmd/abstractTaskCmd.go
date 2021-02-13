@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
-	"github.com/lios/go-activiti/engine/interceptor"
 )
 
 type AbstractTaskCmd interface {

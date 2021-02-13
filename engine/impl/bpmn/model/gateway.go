@@ -1,6 +1,6 @@
 package model
 
 type Gateway struct {
-	*FlowNode
+	FlowNode
 	DefaultFlow string
 }

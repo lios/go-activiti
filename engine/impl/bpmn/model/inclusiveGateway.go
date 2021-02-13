@@ -1,5 +1,9 @@
 package model
 
 type InclusiveGateway struct {
-	*Gateway
+	Gateway
+}
+
+func (inclusiveGateway InclusiveGateway) GetType() string {
+	return "InclusiveGateway"
 }

@@ -11,7 +11,7 @@ type BpmnParser struct {
 }
 
 func (bpmnParser BpmnParser) CreateParse() BpmnParse {
-	return CreateBpmnParse(bpmnParser)
+	return bpmnParser.BpmnParseFactory.CreateBpmnParse(bpmnParser)
 }
 
 func (bpmnParser BpmnParser) SetActivityBehaviorFactory(activityBehaviorFactory factory2.ActivityBehaviorFactory) {

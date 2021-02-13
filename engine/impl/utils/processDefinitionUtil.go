@@ -9,7 +9,7 @@ type ProcessDefinitionUtil struct {
 }
 
 func (ProcessDefinitionUtil) GetProcess(processDefinitionId int64) model.Process {
-	deploymentManager := deploy.DeploymentManager{}
+	deploymentManager := deploy.GetDeploymentManager()
 	definitionEntity := deploymentManager.FindDeployedProcessDefinitionById(processDefinitionId)
 	return deploymentManager.ResolveProcessDefinition(definitionEntity).Process
 }

@@ -2,6 +2,7 @@ package agenda
 
 import (
 	"github.com/lios/go-activiti/engine/impl/manager"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 )
 
 type EndExecutionOperation struct {
@@ -20,11 +21,11 @@ func (end *EndExecutionOperation) Run() (err error) {
 }
 
 func deleteDataForExecution(end *EndExecutionOperation) (err error) {
-	taskManager := manager.GetDataManager().TaskDataManager
-	tasks, errSelect := taskManager.FindByProcessInstanceId(end.Execution.GetTaskId())
+	taskEntityManager := entity.GetTaskEntityManager()
+	tasks, errSelect := taskEntityManager.FindByProcessInstanceId(end.Execution.GetTaskId())
 	if errSelect == nil {
 		for _, task := range tasks {
-			taskManager.DeleteTask(task)
+			taskEntityManager.DeleteTask(&task)
 		}
 	}
 	processInstanceId := end.Execution.GetProcessInstanceId()

@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/lios/go-activiti/common"
+	"github.com/lios/go-activiti/logger"
 	"github.com/lios/go-activiti/runtime"
 	"sync"
 )
@@ -23,6 +24,7 @@ const mainIniPath = "/conf/activiti.properties"
 func init() {
 	configFile := common.ReadConfig(mainIniPath)
 	if configFile == nil {
+		logger.Error("read db config err")
 		panic("err")
 	}
 	TXDB = new(sync.Map)

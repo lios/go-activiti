@@ -19,7 +19,7 @@ func (resourceEntity *ResourceEntityImpl) GetBytes() []byte {
 }
 
 func (resourceEntity *ResourceEntityImpl) SetBytes(bytes []byte) {
-
+	resourceEntity.Bytes = bytes
 }
 
 func (resourceEntity *ResourceEntityImpl) GetDeploymentId() int64 {
@@ -27,5 +27,5 @@ func (resourceEntity *ResourceEntityImpl) GetDeploymentId() int64 {
 }
 
 func (resourceEntity *ResourceEntityImpl) SetDeploymentId(deploymentId int64) {
-
+	resourceEntity.DeploymentId = deploymentId
 }

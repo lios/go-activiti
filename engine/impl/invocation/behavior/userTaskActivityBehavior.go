@@ -2,6 +2,7 @@ package behavior
 
 import (
 	. "github.com/lios/go-activiti/engine/contanst"
+	. "github.com/lios/go-activiti/engine/delegate"
 	"github.com/lios/go-activiti/engine/event"
 	. "github.com/lios/go-activiti/engine/event/impl"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
@@ -19,7 +20,7 @@ type UserTaskActivityBehavior struct {
 }
 
 //普通用户节点处理
-func (user UserTaskActivityBehavior) Execute(execution entity.ExecutionEntity) (err error) {
+func (user UserTaskActivityBehavior) Execute(execution DelegateExecution) (err error) {
 	task := Task{}
 	task.ProcessInstanceId = execution.GetProcessInstanceId()
 	task.Assignee = user.UserTask.Assignee
@@ -27,7 +28,7 @@ func (user UserTaskActivityBehavior) Execute(execution entity.ExecutionEntity) (
 	task.TaskDefineKey = user.UserTask.Id
 	task.TaskDefineName = user.UserTask.Name
 	taskManager := manager.GetDataManager().TaskDataManager
-	taskManager.Task = &task
+	taskManager.Task = task
 	err = taskManager.Insert(execution)
 	if err != nil {
 		return err

@@ -1,9 +1,8 @@
-package handler
+package parse
 
 import (
 	"github.com/lios/go-activiti/engine/impl/bpmn"
 	. "github.com/lios/go-activiti/engine/impl/bpmn/model"
-	. "github.com/lios/go-activiti/engine/impl/bpmn/parse"
 )
 
 type AbstractActivityBpmnParseHandler struct {

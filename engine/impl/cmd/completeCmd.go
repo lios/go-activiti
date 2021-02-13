@@ -6,8 +6,8 @@ import (
 	"github.com/lios/go-activiti/engine/event/impl"
 	. "github.com/lios/go-activiti/engine/impl/bpmn/model"
 	"github.com/lios/go-activiti/engine/impl/handler"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity"
-	"github.com/lios/go-activiti/engine/interceptor"
 )
 
 type CompleteCmd struct {
@@ -40,7 +40,7 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 	//if err != nil {
 	//	return err
 	//}
-	task := entity.(TaskEntityImpl)
+	task := entity.(*TaskEntityImpl)
 	execution := GetExecutionEntityManager().FindById(task.ProcessDefineId)
 	if err != nil {
 		return nil
@@ -56,7 +56,7 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 		return err
 	}
 	currentTask := task.GetCurrentFlowElement()
-	userTask, ok := currentTask.(UserTask)
+	userTask, ok := currentTask.(*UserTask)
 	if ok {
 		taskListeners := userTask.ExtensionElements.TaskListener
 		for _, listener := range taskListeners {

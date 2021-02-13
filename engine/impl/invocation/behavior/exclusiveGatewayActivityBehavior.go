@@ -19,7 +19,7 @@ func (exclusive ExclusiveGatewayActivityBehavior) Execute(execution entity.Execu
 
 func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution entity.ExecutionEntity) (err error) {
 	element := execution.GetCurrentFlowElement()
-	exclusiveGateway, ok := element.(model.ExclusiveGateway)
+	exclusiveGateway, ok := element.(*model.ExclusiveGateway)
 	var outgoingSequenceFlow bpmn.FlowElement
 	var defaultSequenceFlow bpmn.FlowElement
 	if ok {
@@ -27,8 +27,8 @@ func (exclusive ExclusiveGatewayActivityBehavior) Leave(execution entity.Executi
 		sequenceFlowIterator := exclusiveGateway.GetOutgoing()
 		if sequenceFlowIterator != nil && len(sequenceFlowIterator) > 0 {
 			for _, sequenceFlow := range sequenceFlowIterator {
-				flow := (sequenceFlow).(model.SequenceFlow)
-				conditionEvaluatesToTrue := utils.HasTrueCondition(flow, execution)
+				flow := (sequenceFlow).(*model.SequenceFlow)
+				conditionEvaluatesToTrue := utils.HasTrueCondition(*flow, execution)
 				if conditionEvaluatesToTrue && defaultSequenceFlowId != "" && defaultSequenceFlowId != flow.Id {
 					outgoingSequenceFlow = sequenceFlow
 				}

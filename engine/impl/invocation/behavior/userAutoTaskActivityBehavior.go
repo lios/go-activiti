@@ -5,9 +5,8 @@ import (
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
 	. "github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/engine/impl/invocation"
-	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
-	. "github.com/lios/go-activiti/model"
+	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"reflect"
 	"time"
 )
@@ -19,19 +18,19 @@ type UserAutoTaskActivityBehavior struct {
 
 //自动通过用户节点处理
 func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntity) (err error) {
-	task := Task{}
+	task := entity.TaskEntityImpl{}
 	task.ProcessInstanceId = execution.GetProcessInstanceId()
-	task.Assignee = user.UserTask.Assignee
-	task.StartTime = time.Now()
-	task.TaskDefineKey = user.UserTask.Id
-	task.TaskDefineName = user.UserTask.Name
-	dataManager := manager.GetDataManager().TaskDataManager
-	dataManager.Task = &task
-	err = dataManager.Insert(execution)
+	task.SetAssignee(user.UserTask.Assignee)
+	task.SetStartTime(time.Now())
+	task.SetTaskDefineKey(user.UserTask.Id)
+	task.SetTaskDefineName(user.UserTask.Name)
+	dataManager := entity.GetTaskEntityManager()
+	taskDataManager := dataManager.GetDataManager().(TaskDataManager)
+	err = taskDataManager.Insert(task)
 
 	activitiConstructor, err := GetConstructorByName(user.ProcessKey)
 	if err != nil {
-		dataManager.DeleteTask(task)
+		dataManager.DeleteTask(&task)
 		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
 		return nil
 	}
@@ -41,7 +40,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntit
 
 	method, b := reflectConstructor.Type().MethodByName(user.UserTask.Name)
 	if !b {
-		dataManager.DeleteTask(task)
+		dataManager.DeleteTask(&task)
 		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
 		return err
 	}
@@ -55,7 +54,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntit
 		err := errRes.(error)
 		return err
 	}
-	dataManager.DeleteTask(task)
+	dataManager.DeleteTask(&task)
 	invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
 	return err
 }

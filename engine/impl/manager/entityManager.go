@@ -8,7 +8,7 @@ var entityManager EntityManager
 
 type EntityManager struct {
 	//DeploymentManager     *deploy.DeploymentManager
-	ExecutionEntityManager entity.ExecutionEntityManager
+	ExecutionEntityManager *entity.ExecutionEntityManagerImpl
 }
 
 func init() {
@@ -21,7 +21,7 @@ func initEntityManagers() {
 	//	entityManager.DeploymentManager = &deploy.DeploymentManager{}
 	//}
 	if entityManager.ExecutionEntityManager == nil {
-		entityManager.ExecutionEntityManager = entity.ExecutionEntityManagerImpl{}
+		entityManager.ExecutionEntityManager = &entity.ExecutionEntityManagerImpl{}
 	}
 
 }

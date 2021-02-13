@@ -1,8 +1,9 @@
 package cmd
 
 import (
+	"github.com/lios/go-activiti/engine/impl/interceptor"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
-	"github.com/lios/go-activiti/engine/interceptor"
 )
 
 type DeploymentCmd struct {
@@ -13,7 +14,8 @@ type DeploymentCmd struct {
 }
 
 func (deploy DeploymentCmd) Execute(interceptor interceptor.CommandContext) (interface{}, error) {
-	deploymentManager := data.DeploymentDataManager{}
-	err := deploymentManager.Deployments(deploy.Name, deploy.Key, deploy.Bytes)
+	deploymentManager := entity.GetDeploymentEntityManager().GetDataManager()
+	deploymentDataManager := deploymentManager.(data.DeploymentDataManager)
+	err := deploymentDataManager.Deployments(deploy.Name, deploy.Key, deploy.Bytes)
 	return nil, err
 }

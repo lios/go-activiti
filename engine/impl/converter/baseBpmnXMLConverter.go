@@ -9,7 +9,7 @@ import (
 type BaseBpmnXMLConverter interface {
 	GetXMLElementName() string
 
-	convertToBpmnModel(decoder *Decoder, token StartElement, model BpmnModel, activeProcess Process)
+	convertToBpmnModel(decoder *Decoder, token StartElement, model *BpmnModel, activeProcess *Process)
 
-	ConvertXMLToElement(decoder *Decoder, token StartElement, model BpmnModel, activeProcess Process) bpmn.BaseElement
+	ConvertXMLToElement(decoder *Decoder, token StartElement, model *BpmnModel, activeProcess *Process) bpmn.BaseElement
 }

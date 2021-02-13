@@ -6,7 +6,7 @@ import (
 )
 
 type Process struct {
-	FlowElement
+	FlowNode
 	ProcessName            xml.Name                 `xml:"process"`
 	Id                     string                   `xml:"id,attr"`
 	Name                   string                   `xml:"name,attr"`
@@ -31,7 +31,11 @@ func (process Process) GetFlowElement(flowElementId string) FlowElement {
 	return process.FlowElementMap[flowElementId]
 }
 
-func (process Process) AddFlowElement(element FlowElement) {
+func (process *Process) AddFlowElement(element FlowElement) {
 	process.FlowElementList = append(process.FlowElementList, element)
 	process.FlowElementMap[element.GetId()] = element
+}
+
+func (process Process) GetType() string {
+	return "Process"
 }

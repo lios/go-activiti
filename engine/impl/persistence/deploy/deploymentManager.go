@@ -6,6 +6,7 @@ import (
 )
 
 var (
+	deploymentManager       DeploymentManager
 	deploymentEntityManager DeploymentEntityManager
 )
 
@@ -14,11 +15,18 @@ func init() {
 }
 
 type DeploymentManager struct {
-	deployers []Deployer
+	Deployers []Deployer
 }
 
+func SetDeploymentManager(define DeploymentManager) {
+	deploymentManager = define
+}
+
+func GetDeploymentManager() DeploymentManager {
+	return deploymentManager
+}
 func (define DeploymentManager) Deploy(deployment DeploymentEntity, deploymentSettings map[string]interface{}) {
-	for _, deployer := range define.deployers {
+	for _, deployer := range define.Deployers {
 		deployer.Deploy(deployment, deploymentSettings)
 	}
 }

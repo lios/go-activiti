@@ -22,7 +22,7 @@ func (deploymentEntity DeploymentEntityManagerImpl) FindById(entityId int64) Dep
 	manager := deploymentEntity.GetDataManager()
 	dataManager := manager.(DeploymentDataManager)
 	deployment := Deployment{}
-	err := dataManager.FindById(entityId, deployment)
+	err := dataManager.FindById(entityId, &deployment)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -38,5 +38,5 @@ func (deploymentEntity DeploymentEntityManagerImpl) FindById(entityId int64) Dep
 	resourceEntityImpl.SetDeploymentId(resource.DeploymentId)
 	resourceEntityImpl.SetBytes([]byte(resource.Bytes))
 	deploymentEntityImpl.SetResources(&resourceEntityImpl)
-	return deploymentEntityImpl
+	return &deploymentEntityImpl
 }

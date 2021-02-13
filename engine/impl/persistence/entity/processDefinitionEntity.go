@@ -1,6 +1,8 @@
 package entity
 
 type ProcessDefinitionEntity interface {
+	Entity
+
 	SetKey(key string)
 
 	GetKey() string

@@ -13,7 +13,7 @@ type TriggerExecutionOperation struct {
 
 func (trigger TriggerExecutionOperation) Run() (err error) {
 	element := trigger.getCurrentFlowElement(trigger.Execution)
-	flowNode := element.(model.FlowNode)
+	flowNode := element.(*model.FlowNode)
 	behavior := flowNode.GetBehavior()
 	operation := behavior.(TriggerableActivityBehavior)
 	operation.Trigger(trigger.Execution)

@@ -11,6 +11,7 @@ import (
 )
 
 type TaskDataManager struct {
+	TableModel
 	Task
 	AbstractDataManager
 	TaskModel *Task

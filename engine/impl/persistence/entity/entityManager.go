@@ -15,7 +15,6 @@ var (
 )
 
 type EntityManager interface {
-	Entity
 	GetDataManager() data.DataManagers
 
 	Insert(interface{}) error

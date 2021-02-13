@@ -13,11 +13,11 @@ type ContinueProcessOperation struct {
 func (cont *ContinueProcessOperation) Run() (err error) {
 	element := cont.Execution.GetCurrentFlowElement()
 	if element != nil {
-		flow, ok := element.(model.SequenceFlow)
+		flow, ok := element.(*model.SequenceFlow)
 		if !ok {
 			err = cont.continueThroughFlowNode(element)
 		} else {
-			cont.continueThroughSequenceFlow(flow)
+			cont.continueThroughSequenceFlow(*flow)
 		}
 	}
 	return err

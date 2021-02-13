@@ -19,14 +19,14 @@ const (
 	file_path   = "F:\\Work\\go-activiti\\resources\\userAuto.bpmn20.xml"
 )
 
-var processEngineConfiguration cfg.ProcessEngineConfigurationImpl
+var processEngineConfiguration *cfg.ProcessEngineConfigurationImpl
 
 type ActivitiListener struct {
 	name string
 }
 
 func init() {
-	processEngineConfiguration = cfg.ProcessEngineConfigurationImpl{}
+	processEngineConfiguration = cfg.GetProcessEngineConfiguration()
 }
 func (act ActivitiListener) OnEvent(event event.ActivitiEvent) error {
 	fmt.Println(event)
@@ -67,7 +67,7 @@ func TestStartProcss(t *testing.T) {
 	variables["age"] = 18
 	variables["isOld"] = true
 	runtime := processEngineConfiguration.RuntimeService
-	runtime.StartProcessInstanceByKey(userKey, variables, "", "")
+	runtime.StartProcessInstanceByKey(userAutoKey, variables, "", "")
 }
 
 //测试发起流程

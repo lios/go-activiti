@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"github.com/lios/go-activiti/engine/impl/utils"
-	"github.com/lios/go-activiti/engine/interceptor"
+	"github.com/lios/go-activiti/logger"
 	. "github.com/lios/go-activiti/model"
 	"time"
 )
@@ -18,8 +19,13 @@ type StartProcessInstanceByKeyCmd struct {
 }
 
 func (start StartProcessInstanceByKeyCmd) Execute(command interceptor.CommandContext) (interface{}, error) {
+	dataManager := entity.GetProcessDefinitionEntityManager()
+	definitionEntity, err := dataManager.FindLatestProcessDefinitionByKey(start.ProcessDefinitionKey)
+	if err != nil {
+		logger.Error("FindLatestProcessDefinitionByKey err：", err)
+	}
 	processUtils := utils.ProcessDefinitionUtil{}
-	process := processUtils.GetProcess(start.ProcessDefinitionKey)
+	process := processUtils.GetProcess(definitionEntity.GetId())
 	instance := ProcessInstance{}
 	instance.BusinessKey = start.BusinessKey
 	instance.TenantId = start.TenantId
@@ -33,7 +39,7 @@ func (start StartProcessInstanceByKeyCmd) Execute(command interceptor.CommandCon
 	manager.CreateProcessInstance()
 	//获取开始节点
 	flowElement := process.InitialFlowElement
-	element := flowElement.(model.StartEvent)
+	element := flowElement.(*model.StartEvent)
 	execution := entity.ExecutionEntityImpl{ProcessInstanceId: instance.Id}
 	execution.SetCurrentFlowElement(element)
 	//execution.SetProcessDefineId(bytearries[0].Id)
@@ -45,7 +51,7 @@ func (start StartProcessInstanceByKeyCmd) Execute(command interceptor.CommandCon
 	//}
 	context, err := interceptor.GetCommandContext()
 	if err == nil {
-		context.Agenda.PlanContinueProcessOperation(execution)
+		context.Agenda.PlanContinueProcessOperation(&execution)
 	}
 	return process, nil
 }

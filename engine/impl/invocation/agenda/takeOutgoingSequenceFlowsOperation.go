@@ -14,7 +14,7 @@ type TakeOutgoingSequenceFlowsOperation struct {
 
 func (task TakeOutgoingSequenceFlowsOperation) Run() (err error) {
 	currentFlowElement := task.getCurrentFlowElement()
-	_, ok := currentFlowElement.(model.SequenceFlow)
+	_, ok := currentFlowElement.(*model.SequenceFlow)
 	if ok {
 		task.handleSequenceFlow()
 	} else {
@@ -31,7 +31,7 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 	if err != nil {
 		return err
 	}
-	gateway, ok := currentFlowElement.(model.Gateway)
+	gateway, ok := currentFlowElement.(*model.Gateway)
 	var defaultSequenceFlowId = ""
 	if ok {
 		defaultSequenceFlowId = gateway.DefaultFlow
@@ -40,8 +40,8 @@ func (task TakeOutgoingSequenceFlowsOperation) handleFlowNode() (err error) {
 	var outgoingSequenceFlows = make([]bpmn.FlowElement, 0)
 	if len(flowElements) > 0 {
 		for _, flowElement := range flowElements {
-			sequenceFlow := (flowElement).(model.SequenceFlow)
-			if !task.EvaluateConditions || utils.HasTrueCondition(sequenceFlow, execution) {
+			sequenceFlow := (flowElement).(*model.SequenceFlow)
+			if !task.EvaluateConditions || utils.HasTrueCondition(*sequenceFlow, execution) {
 				outgoingSequenceFlows = append(outgoingSequenceFlows, flowElement)
 			}
 		}

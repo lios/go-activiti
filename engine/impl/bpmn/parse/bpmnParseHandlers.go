@@ -2,27 +2,41 @@ package parse
 
 import (
 	"github.com/lios/go-activiti/engine/impl/bpmn"
-	"github.com/lios/go-activiti/engine/impl/bpmn/parse/handler"
 	"github.com/lios/go-activiti/logger"
 )
 
 type BpmnParseHandlers struct {
-	ParseHandlers map[bpmn.BaseElement][]handler.BpmnParseHandler
+	ParseHandlers map[string][]BpmnParseHandler
 }
 
 func NewBpmnParseHandlers() BpmnParseHandlers {
-	return BpmnParseHandlers{ParseHandlers: make(map[bpmn.BaseElement][]handler.BpmnParseHandler, 0)}
+	return BpmnParseHandlers{ParseHandlers: make(map[string][]BpmnParseHandler, 0)}
+}
+func (bpmnParseHandlers BpmnParseHandlers) AddHandlers(handlers []BpmnParseHandler) {
+	for _, handler := range handlers {
+		bpmnParseHandlers.AddHandler(handler)
+	}
 }
 
-func (bpmnParseHandlers BpmnParseHandlers) AddHandlers(name bpmn.BaseElement, bpmnParseHandler []handler.BpmnParseHandler) {
-	bpmnParseHandlers.ParseHandlers[name] = bpmnParseHandler
+func (bpmnParseHandlers BpmnParseHandlers) AddHandler(bpmnParseHandler BpmnParseHandler) {
+	handledTypes := bpmnParseHandler.GetHandledTypes()
+	for _, handledType := range handledTypes {
+		_, ok := bpmnParseHandlers.ParseHandlers[handledType]
+		if !ok {
+			parseHandlers := make([]BpmnParseHandler, 0)
+			bpmnParseHandlers.ParseHandlers[handledType] = parseHandlers
+		}
+		bpmnParseHandlers.ParseHandlers[handledType] = append(bpmnParseHandlers.ParseHandlers[handledType], bpmnParseHandler)
+
+	}
 }
 func (bpmnParseHandlers BpmnParseHandlers) ParseElement(bpmnParse *BpmnParse, element bpmn.BaseElement) {
 	flowElement, ok := element.(bpmn.FlowElement)
 	if ok {
 		bpmnParse.SetCurrentFlowElement(flowElement)
 	}
-	handlers := bpmnParseHandlers.ParseHandlers[element]
+	handlerType := flowElement.GetHandlerType()
+	handlers := bpmnParseHandlers.ParseHandlers[handlerType]
 	if handlers != nil && len(handlers) > 0 {
 		for _, handler := range handlers {
 			handler.Parse(bpmnParse, element)

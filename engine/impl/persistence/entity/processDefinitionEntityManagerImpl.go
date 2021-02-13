@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"github.com/lios/go-activiti/logger"
 	"github.com/lios/go-activiti/model"
@@ -19,19 +20,22 @@ func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) GetDat
 func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindProcessDefinitionById(processDefinitionId int64) ProcessDefinitionEntity {
 	bytearry := model.Bytearry{}
 	defineEntityManager := processInstanceDataManager
-	defineEntityManager.FindById(processDefinitionId, bytearry)
+	defineEntityManager.FindById(processDefinitionId, &bytearry)
 	definitionEntityImpl := ProcessDefinitionEntityImpl{}
 	definitionEntityImpl.SetName(bytearry.Name)
-	return definitionEntityImpl
+	definitionEntityImpl.SetId(bytearry.Id)
+	definitionEntityImpl.SetDeploymentId(bytearry.DeploymentId)
+	return &definitionEntityImpl
 }
-func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindLatestProcessDefinitionByKey(processDefinitionKey string) ProcessDefinitionEntity {
+func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindLatestProcessDefinitionByKey(processDefinitionKey string) (ProcessDefinitionEntity, error) {
 	defineEntityManager := processInstanceDataManager
 	bytearry, err := defineEntityManager.FindDeployedProcessDefinitionByKey(processDefinitionKey)
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		logger.Error("FindDeployedProcessDefinitionByKey err :", err)
-		panic("FindDeployedProcessDefinitionByKey err")
+		return nil, err
 	}
 	definitionEntityImpl := ProcessDefinitionEntityImpl{}
+	definitionEntityImpl.SetId(bytearry.Id)
 	definitionEntityImpl.SetName(bytearry.Name)
-	return definitionEntityImpl
+	return &definitionEntityImpl, nil
 }
