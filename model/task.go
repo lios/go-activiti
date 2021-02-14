@@ -20,6 +20,6 @@ func (Task) TableName() string {
 	return "task"
 }
 
-func (tableModel TableModel) getTableName() string {
+func (Task) getTableName() string {
 	return "task"
 }

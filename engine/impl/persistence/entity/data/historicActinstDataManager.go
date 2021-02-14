@@ -2,10 +2,8 @@ package data
 
 import (
 	"github.com/lios/go-activiti/db"
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	. "github.com/lios/go-activiti/model"
 	"github.com/prometheus/common/log"
-	"reflect"
 	"time"
 )
 
@@ -13,20 +11,6 @@ type HistoricActinstDataManager struct {
 	DataManagers
 	HistoricActinst HistoricActinst
 }
-
-//func (historicActinstManager HistoricActinstDataManager) RecordActivityStart(entity entity2.ExecutionEntity) {
-//	historicActinst := HistoricActinst{}
-//	historicActinst.ProcessDefineId = entity.GetProcessDefineId()
-//	historicActinst.ProcessInstanceId = entity.GetProcessInstanceId()
-//	historicActinst.ActId = entity.GetCurrentActivityId()
-//	if entity.GetCurrentFlowElement() != nil {
-//		historicActinst.ActName = entity.GetCurrentFlowElement().GetName()
-//		historicActinst.ActType = historicActinstManager.parseActivityType(entity.GetCurrentFlowElement())
-//	}
-//	historicActinst.StartTime = time.Now()
-//	historicActinstManager.HistoricActinst = historicActinst
-//	historicActinstManager.Insert()
-//}
 
 func (historicActinstManager HistoricActinstDataManager) FindUnfinishedHistoricActivityInstancesByExecutionAndActivityId(processInstanceId int64, actId string) (HistoricActinst, error) {
 	historicActinst := HistoricActinst{}
@@ -77,8 +61,3 @@ func (historicActinstManager HistoricActinstDataManager) UpdateTaskId(taskId int
 //	}
 //	return err
 //}
-
-func (historicActinstManager HistoricActinstDataManager) parseActivityType(element bpmn.FlowElement) string {
-	typeOf := reflect.TypeOf(element)
-	return typeOf.Name()
-}

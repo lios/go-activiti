@@ -11,3 +11,12 @@ func (bpmnModel BpmnModel) GetMainProcess() []*Process {
 func (bpmnModel *BpmnModel) AddProcess(process *Process) {
 	bpmnModel.Processes = append(bpmnModel.Processes, process)
 }
+
+func (bpmnModel *BpmnModel) GetProcessById(id string) *Process {
+	for _, process := range bpmnModel.Processes {
+		if process.Id == id {
+			return process
+		}
+	}
+	return nil
+}

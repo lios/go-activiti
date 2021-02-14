@@ -30,9 +30,11 @@ func (deploymentEntity *DeploymentEntityImpl) SetName(name string) {
 }
 
 func (deploymentEntity *DeploymentEntityImpl) SetKey(key string) {
-
+	deploymentEntity.Key = key
 }
-
+func (deploymentEntity *DeploymentEntityImpl) GetKey() string {
+	return deploymentEntity.Key
+}
 func (deploymentEntity *DeploymentEntityImpl) SetTenantId(tenantId string) {
 
 }

@@ -32,8 +32,8 @@ func (start StartProcessInstanceByKeyCmd) Execute(command interceptor.CommandCon
 	instance.StartTime = time.Now()
 	instance.Key = process.Id
 	instance.Name = process.Name
-	//instance.ProcessDefineId = process.Id
-	//instance.DeploymentId = bytearries[0].DeploymentId
+	instance.ProcessDefineId = definitionEntity.GetId()
+	instance.DeploymentId = definitionEntity.GetDeploymentId()
 	//生成流程实例
 	manager := data.ProcessInstanceDataManager{Instance: &instance}
 	manager.CreateProcessInstance()

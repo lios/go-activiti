@@ -15,7 +15,8 @@ func init() {
 }
 
 type DeploymentManager struct {
-	Deployers []Deployer
+	ProcessDefinitionCacheEntry ProcessDefinitionCacheEntry
+	Deployers                   []Deployer
 }
 
 func SetDeploymentManager(define DeploymentManager) {
@@ -25,18 +26,21 @@ func SetDeploymentManager(define DeploymentManager) {
 func GetDeploymentManager() DeploymentManager {
 	return deploymentManager
 }
-func (define DeploymentManager) Deploy(deployment DeploymentEntity, deploymentSettings map[string]interface{}) {
+func (define *DeploymentManager) Deploys(deployment DeploymentEntity, deploymentSettings map[string]interface{}) {
+	var cacheEntry ProcessDefinitionCacheEntry
 	for _, deployer := range define.Deployers {
 		deployer.Deploy(deployment, deploymentSettings)
+		process := deployer.GetProcess(deployment.GetKey())
+		cacheEntry = NewProcessDefinitionCacheEntry(process)
 	}
+	define.ProcessDefinitionCacheEntry = cacheEntry
 }
-func (define DeploymentManager) ResolveProcessDefinition(definitionEntity ProcessDefinitionEntity) ProcessDefinitionCacheEntry {
+func (define *DeploymentManager) ResolveProcessDefinition(definitionEntity ProcessDefinitionEntity) ProcessDefinitionCacheEntry {
 	deploymentId := definitionEntity.GetDeploymentId()
 	deployment := deploymentEntityManager.FindById(deploymentId)
 	deployment.SetNew(false)
-	define.Deploy(deployment, nil)
-	cacheEntry := ProcessDefinitionCacheEntry{}
-	return cacheEntry
+	define.Deploys(deployment, nil)
+	return define.ProcessDefinitionCacheEntry
 }
 
 func (define DeploymentManager) FindDeployedProcessDefinitionById(processDefinitionId int64) ProcessDefinitionEntity {

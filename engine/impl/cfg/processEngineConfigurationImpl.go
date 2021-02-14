@@ -188,7 +188,7 @@ func getDefaultDeployers() []Deployer {
 	initBpmnDeployerDependencies()
 	bpmnDeployer.ParsedDeploymentBuilderFactory = processEngineConfiguration.ParsedDeploymentBuilderFactory
 	processEngineConfiguration.BpmnDeployer = bpmnDeployer
-	defaultDeployers = append(defaultDeployers, bpmnDeployer)
+	defaultDeployers = append(defaultDeployers, &bpmnDeployer)
 	return defaultDeployers
 }
 func initBpmnDeployerDependencies() {

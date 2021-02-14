@@ -18,7 +18,7 @@ type ExecutionEntityImpl struct {
 	CurrentActivityId  string
 }
 
-func (execution ExecutionEntityImpl) SetBusinessKey(businessKey string) {
+func (execution *ExecutionEntityImpl) SetBusinessKey(businessKey string) {
 	execution.BusinessKey = businessKey
 }
 
@@ -26,7 +26,7 @@ func (execution ExecutionEntityImpl) GetCurrentFlowElement() bpmn.FlowElement {
 	return execution.CurrentFlowElement
 }
 
-func (execution ExecutionEntityImpl) SetCurrentFlowElement(flow bpmn.FlowElement) {
+func (execution *ExecutionEntityImpl) SetCurrentFlowElement(flow bpmn.FlowElement) {
 	execution.CurrentFlowElement = flow
 	execution.CurrentActivityId = flow.GetId()
 }
@@ -35,7 +35,7 @@ func (execution ExecutionEntityImpl) GetDeploymentId() int {
 	return execution.DeploymentId
 }
 
-func (execution ExecutionEntityImpl) SetDeploymentId(deploymentId int) {
+func (execution *ExecutionEntityImpl) SetDeploymentId(deploymentId int) {
 	execution.DeploymentId = deploymentId
 }
 
@@ -43,7 +43,7 @@ func (execution ExecutionEntityImpl) GetProcessInstanceId() int64 {
 	return execution.ProcessInstanceId
 }
 
-func (execution ExecutionEntityImpl) SetProcessInstanceId(processInstanceId int64) {
+func (execution *ExecutionEntityImpl) SetProcessInstanceId(processInstanceId int64) {
 	execution.ProcessInstanceId = processInstanceId
 }
 
@@ -51,7 +51,7 @@ func (execution ExecutionEntityImpl) GetProcessDefineId() int64 {
 	return execution.ProcessDefineId
 }
 
-func (execution ExecutionEntityImpl) SetProcessDefineId(processDefineId int64) {
+func (execution *ExecutionEntityImpl) SetProcessDefineId(processDefineId int64) {
 	execution.ProcessDefineId = processDefineId
 }
 
@@ -59,7 +59,7 @@ func (execution ExecutionEntityImpl) GetCurrentActivityId() string {
 	return execution.CurrentActivityId
 }
 
-func (execution ExecutionEntityImpl) SetCurrentActivityId(currentActivityId string) {
+func (execution *ExecutionEntityImpl) SetCurrentActivityId(currentActivityId string) {
 	execution.CurrentActivityId = currentActivityId
 }
 
@@ -67,7 +67,7 @@ func (execution ExecutionEntityImpl) GetTaskId() int64 {
 	return -1
 }
 
-func (execution ExecutionEntityImpl) SetTaskId(taskId int64) {
+func (execution *ExecutionEntityImpl) SetTaskId(taskId int64) {
 
 }
 func (execution ExecutionEntityImpl) GetProcessVariable() map[string]interface{} {

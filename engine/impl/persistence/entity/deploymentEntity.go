@@ -13,6 +13,8 @@ type DeploymentEntity interface {
 
 	SetKey(key string)
 
+	GetKey() string
+
 	SetTenantId(tenantId string)
 
 	SetResources(ResourceEntity)

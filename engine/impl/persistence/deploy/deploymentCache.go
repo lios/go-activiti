@@ -1,9 +1,11 @@
 package deploy
 
-var deploymentCache map[string]interface{}
+import "sync"
+
+var deploymentCache *sync.Map
 
 type DeploymentCache interface {
-	Get(id string) interface{}
-	Add(id string, object interface{})
+	Get(id string) ProcessDefinitionCacheEntry
+	Add(id string, object ProcessDefinitionCacheEntry)
 	Clear()
 }

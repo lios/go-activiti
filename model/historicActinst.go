@@ -6,6 +6,7 @@ import (
 
 //流程实例
 type HistoricActinst struct {
+	TableModel
 	Id                int64
 	ProcessDefineId   int64     `gorm:"column:process_define_id"`
 	ProcessInstanceId int64     `gorm:"column:proc_inst_id"`
@@ -21,5 +22,9 @@ type HistoricActinst struct {
 }
 
 func (HistoricActinst) TableName() string {
+	return "hi_actinst"
+}
+
+func (HistoricActinst) getTableName() string {
 	return "hi_actinst"
 }

@@ -28,6 +28,7 @@ func (deploymentEntity DeploymentEntityManagerImpl) FindById(entityId int64) Dep
 	}
 	deploymentEntityImpl := DeploymentEntityImpl{}
 	deploymentEntityImpl.SetName(deployment.Name)
+	deploymentEntityImpl.SetKey(deployment.Key)
 	resourceDataManager := GetResourceDataManager().GetDataManager().(ResourceDataManager)
 	resource, err := resourceDataManager.FindDeployedProcessDefinitionByDeploymentId(deployment.Id)
 	if err != nil {
