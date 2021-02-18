@@ -8,7 +8,7 @@ import (
 )
 
 type HistoricActinstDataManager struct {
-	DataManagers
+	AbstractDataManager
 	HistoricActinst HistoricActinst
 }
 

@@ -2,7 +2,7 @@ package handler
 
 import (
 	. "github.com/lios/go-activiti/engine/contanst"
-	"github.com/lios/go-activiti/engine/delegate"
+	delegate2 "github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/errs"
 	"reflect"
 	"sync"
@@ -20,7 +20,7 @@ type IActiviti interface {
 	GetOutPut() interface{}
 }
 
-type ActivitiConstructor func(entity delegate.DelegateExecution) IActiviti
+type ActivitiConstructor func(entity delegate2.DelegateExecution) IActiviti
 
 func RegisterConstructor(name string, constructor ActivitiConstructor) error {
 	lock.Lock()
@@ -44,7 +44,7 @@ func GetConstructorByName(name string) (ActivitiConstructor, error) {
 	return constructor, nil
 }
 
-func PerformTaskListener(entity delegate.DelegateExecution, taskName, processKey string) error {
+func PerformTaskListener(entity delegate2.DelegateExecution, taskName, processKey string) error {
 	activitiConstructor, err := GetConstructorByName(processKey)
 	if err != nil {
 		return err

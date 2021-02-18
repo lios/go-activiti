@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/engine/impl/interceptor"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/utils"
@@ -34,7 +34,7 @@ func (backTaskCmd BackTaskCmd) TaskExecute(command interceptor.CommandContext, e
 	return true, err
 }
 
-func createTask(element bpmn.FlowElement, sourceRef, targetRef string) []bpmn.FlowElement {
+func createTask(element delegate.FlowElement, sourceRef, targetRef string) []delegate.FlowElement {
 	sequenceFlow := model.SequenceFlow{}
 	flow := model.FlowNode{}
 	sequenceFlow.FlowNode = flow
@@ -42,7 +42,7 @@ func createTask(element bpmn.FlowElement, sourceRef, targetRef string) []bpmn.Fl
 	sequenceFlow.SourceRef = sourceRef
 	sequenceFlow.TargetRef = targetRef
 	sequenceFlow.SetTargetFlowElement(element)
-	flowElement := make([]bpmn.FlowElement, 0)
+	flowElement := make([]delegate.FlowElement, 0)
 	flowElement = append(flowElement, &sequenceFlow)
 	return flowElement
 }

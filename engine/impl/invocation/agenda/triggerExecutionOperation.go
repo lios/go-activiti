@@ -1,8 +1,8 @@
 package agenda
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/invocation/behavior"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 )
@@ -20,7 +20,7 @@ func (trigger TriggerExecutionOperation) Run() (err error) {
 	return err
 }
 
-func (trigger TriggerExecutionOperation) getCurrentFlowElement(execut entity.ExecutionEntity) bpmn.FlowElement {
+func (trigger TriggerExecutionOperation) getCurrentFlowElement(execut entity.ExecutionEntity) delegate.FlowElement {
 	currentFlowElement := execut.GetCurrentFlowElement()
 	if currentFlowElement != nil {
 		return currentFlowElement

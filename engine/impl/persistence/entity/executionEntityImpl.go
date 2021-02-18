@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	. "github.com/lios/go-activiti/engine/variable"
 )
@@ -11,7 +11,7 @@ type ExecutionEntityImpl struct {
 	AbstractEntityManager
 	VariableScopeImpl
 	BusinessKey        string
-	CurrentFlowElement bpmn.FlowElement
+	CurrentFlowElement delegate.FlowElement
 	DeploymentId       int
 	ProcessInstanceId  int64
 	ProcessDefineId    int64
@@ -22,11 +22,11 @@ func (execution *ExecutionEntityImpl) SetBusinessKey(businessKey string) {
 	execution.BusinessKey = businessKey
 }
 
-func (execution ExecutionEntityImpl) GetCurrentFlowElement() bpmn.FlowElement {
+func (execution ExecutionEntityImpl) GetCurrentFlowElement() delegate.FlowElement {
 	return execution.CurrentFlowElement
 }
 
-func (execution *ExecutionEntityImpl) SetCurrentFlowElement(flow bpmn.FlowElement) {
+func (execution *ExecutionEntityImpl) SetCurrentFlowElement(flow delegate.FlowElement) {
 	execution.CurrentFlowElement = flow
 	execution.CurrentActivityId = flow.GetId()
 }

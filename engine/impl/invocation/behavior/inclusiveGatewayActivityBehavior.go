@@ -1,7 +1,7 @@
 package behavior
 
 import (
-	"github.com/lios/go-activiti/engine/impl/invocation"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/utils"
@@ -34,7 +34,7 @@ func (exclusive InclusiveGatewayActivityBehavior) Leave(execution entity.Executi
 	}
 	if !oneExecutionCanReachGateway {
 		//执行出口逻辑，设置条件判断
-		invocation.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
+		interceptor.GetAgenda().Agenda.PlanTakeOutgoingSequenceFlowsOperation(execution, true)
 	}
 	return nil
 }

@@ -4,7 +4,7 @@ import (
 	. "github.com/lios/go-activiti/engine/contanst"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
 	. "github.com/lios/go-activiti/engine/impl/handler"
-	"github.com/lios/go-activiti/engine/impl/invocation"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"reflect"
@@ -31,7 +31,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntit
 	activitiConstructor, err := GetConstructorByName(user.ProcessKey)
 	if err != nil {
 		dataManager.DeleteTask(&task)
-		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+		interceptor.GetAgenda().Agenda.PlanTriggerExecutionOperation(execution)
 		return nil
 	}
 	constructor := activitiConstructor(execution)
@@ -41,7 +41,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntit
 	method, b := reflectConstructor.Type().MethodByName(user.UserTask.Name)
 	if !b {
 		dataManager.DeleteTask(&task)
-		invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+		interceptor.GetAgenda().Agenda.PlanTriggerExecutionOperation(execution)
 		return err
 	}
 
@@ -55,7 +55,7 @@ func (user UserAutoTaskActivityBehavior) Execute(execution entity.ExecutionEntit
 		return err
 	}
 	dataManager.DeleteTask(&task)
-	invocation.GetAgenda().PlanTriggerExecutionOperation(execution)
+	interceptor.GetAgenda().Agenda.PlanTriggerExecutionOperation(execution)
 	return err
 }
 
@@ -67,5 +67,5 @@ func (user UserAutoTaskActivityBehavior) Trigger(execution entity.ExecutionEntit
 func (user UserAutoTaskActivityBehavior) Leave(execution entity.ExecutionEntity) {
 	element := execution.GetCurrentFlowElement()
 	execution.SetCurrentFlowElement(element)
-	invocation.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
+	interceptor.GetAgenda().Agenda.PlanTakeOutgoingSequenceFlowsOperation(execution, true)
 }

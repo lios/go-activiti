@@ -7,6 +7,8 @@ import (
 	. "github.com/lios/go-activiti/engine/impl/bpmn/parse/deployer"
 	. "github.com/lios/go-activiti/engine/impl/bpmn/parse/factory"
 	"github.com/lios/go-activiti/engine/impl/interceptor"
+	. "github.com/lios/go-activiti/engine/impl/invocation"
+	. "github.com/lios/go-activiti/engine/impl/invocation/agenda"
 	. "github.com/lios/go-activiti/engine/impl/persistence/deploy"
 )
 
@@ -21,6 +23,7 @@ type ProcessEngineConfigurationImpl struct {
 	CommandContextFactory interceptor.CommandContextFactory
 	EventDispatcher       ActivitiEventDispatcher
 	PostBpmnParseHandlers []BpmnParseHandler
+	ActivitiEngineAgenda  ActivitiEngineAgenda
 
 	RuntimeService    RuntimeService
 	RepositoryService RepositoryService
@@ -45,12 +48,19 @@ func init() {
 	initCommandInvoker()
 	initCommandInterceptors()
 	initCommandExecutor()
+	initActivitiEngineAgenda()
 	initServices()
 	initService()
 	initCommandContext(processEngineConfiguration)
 	initEventDispatcher()
 	initBpmnParser()
 	initDeployers()
+}
+
+func initActivitiEngineAgenda() {
+	activitiEngineAgenda := DefaultActivitiEngineAgenda{}
+	interceptor.SetActivitiEngineAgenda(&activitiEngineAgenda)
+	processEngineConfiguration.ActivitiEngineAgenda = &activitiEngineAgenda
 }
 
 func initCommandContext(configuration ProcessEngineConfigurationImpl) {

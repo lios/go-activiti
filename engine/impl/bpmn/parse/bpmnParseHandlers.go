@@ -1,7 +1,7 @@
 package parse
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/logger"
 )
 
@@ -30,8 +30,8 @@ func (bpmnParseHandlers BpmnParseHandlers) AddHandler(bpmnParseHandler BpmnParse
 
 	}
 }
-func (bpmnParseHandlers BpmnParseHandlers) ParseElement(bpmnParse *BpmnParse, element bpmn.BaseElement) {
-	flowElement, ok := element.(bpmn.FlowElement)
+func (bpmnParseHandlers BpmnParseHandlers) ParseElement(bpmnParse *BpmnParse, element delegate.BaseElement) {
+	flowElement, ok := element.(delegate.FlowElement)
 	if ok {
 		bpmnParse.SetCurrentFlowElement(flowElement)
 	}

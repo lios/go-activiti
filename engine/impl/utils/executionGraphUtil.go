@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type ExecutionGraphUtil struct {
@@ -26,12 +26,12 @@ func IsReachable(processDefinitionId int64, sourceElementId string, targetElemen
 		flow, _ := (element).(*model.SequenceFlow)
 		targetFlow = flow
 	}
-	var visitedElements = make(map[string]bpmn.FlowElement, 0)
+	var visitedElements = make(map[string]delegate.FlowElement, 0)
 	return isReachable(process, sourceFlow, targetFlow, visitedElements)
 
 }
 
-func isReachable(process model.Process, sourceElement bpmn.FlowElement, targetElement bpmn.FlowElement, visitedElements map[string]bpmn.FlowElement) bool {
+func isReachable(process model.Process, sourceElement delegate.FlowElement, targetElement delegate.FlowElement, visitedElements map[string]delegate.FlowElement) bool {
 	if sourceElement.GetId() == targetElement.GetId() {
 		return true
 	}

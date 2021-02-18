@@ -1,8 +1,8 @@
 package parse
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type StartEventParseHandler struct {
@@ -13,6 +13,6 @@ func (startEventParseHandler StartEventParseHandler) GetHandledType() string {
 	return model.StartEvent{}.GetType()
 }
 
-func (startEventParseHandler StartEventParseHandler) ExecuteParse(bpmnParse BpmnParse, flow bpmn.BaseElement) {
+func (startEventParseHandler StartEventParseHandler) ExecuteParse(bpmnParse BpmnParse, flow delegate.BaseElement) {
 
 }

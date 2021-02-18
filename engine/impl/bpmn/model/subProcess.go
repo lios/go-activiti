@@ -2,10 +2,10 @@ package model
 
 import (
 	"encoding/xml"
-	"github.com/lios/go-activiti/engine/impl/bpmn"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type SubProcess struct {
-	bpmn.BaseElement
+	delegate.BaseElement
 	MessageName xml.Name `xml:"message"`
 }

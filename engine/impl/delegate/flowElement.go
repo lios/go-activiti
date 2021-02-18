@@ -1,4 +1,4 @@
-package bpmn
+package delegate
 
 //接口
 type FlowElement interface {
@@ -7,6 +7,8 @@ type FlowElement interface {
 	SetIncoming(f []FlowElement)
 	GetIncoming() []FlowElement
 	GetOutgoing() []FlowElement
+	GetBehavior() ActivityBehavior
+	SetBehavior(behavior ActivityBehavior)
 
 	SetSourceFlowElement(f FlowElement)
 	SetTargetFlowElement(f FlowElement)

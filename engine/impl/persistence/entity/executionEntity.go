@@ -1,11 +1,11 @@
 package entity
 
 import (
-	"github.com/lios/go-activiti/engine/delegate"
+	delegate2 "github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type ExecutionEntity interface {
-	delegate.DelegateExecution
+	delegate2.DelegateExecution
 	Entity
 	//SetBusinessKey(businessKey string)
 	//

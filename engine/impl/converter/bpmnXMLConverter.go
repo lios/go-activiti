@@ -4,9 +4,9 @@ import (
 	"bytes"
 	. "encoding/xml"
 	. "github.com/lios/go-activiti/engine/contanst"
-	. "github.com/lios/go-activiti/engine/impl/bpmn"
 	. "github.com/lios/go-activiti/engine/impl/bpmn/model"
 	"github.com/lios/go-activiti/engine/impl/converter/parser"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/logger"
 )
 
@@ -67,11 +67,11 @@ func bpmnDecoder(decoder *Decoder, model *BpmnModel) {
 }
 func (bpmnXMLConverter BpmnXMLConverter) convertToBpmnModel(decoder *Decoder, token StartElement, model *BpmnModel, activeProcess *Process) {
 	parsedElement := bpmnXMLConverter.BaseBpmnXMLConverter.ConvertXMLToElement(decoder, token, model, activeProcess)
-	flowElement := parsedElement.(FlowElement)
+	flowElement := parsedElement.(delegate.FlowElement)
 	activeProcess.AddFlowElement(flowElement)
 }
 
-func processFlowElements(flowElementList []FlowElement, parentScope BaseElement) {
+func processFlowElements(flowElementList []delegate.FlowElement, parentScope delegate.BaseElement) {
 	for _, flowElement := range flowElementList {
 		sequenceFlow, ok := flowElement.(*SequenceFlow)
 		if !ok {
@@ -93,7 +93,7 @@ func processFlowElements(flowElementList []FlowElement, parentScope BaseElement)
 
 	}
 }
-func getFlowNodeFromScope(elementId string, scope BaseElement) FlowElement {
+func getFlowNodeFromScope(elementId string, scope delegate.BaseElement) delegate.FlowElement {
 	process, ok := scope.(*Process)
 	if !ok {
 		return nil

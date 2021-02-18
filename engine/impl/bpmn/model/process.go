@@ -2,7 +2,7 @@ package model
 
 import (
 	"encoding/xml"
-	. "github.com/lios/go-activiti/engine/impl/bpmn"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type Process struct {
@@ -22,16 +22,16 @@ type Process struct {
 	BoundaryEvent          []BoundaryEvent          `xml:"boundaryEvent"`
 	IntermediateCatchEvent []IntermediateCatchEvent `xml:"intermediateCatchEvent"`
 	SubProcess             []SubProcess             `xml:"subProcess"`
-	FlowElementList        []FlowElement
-	InitialFlowElement     FlowElement
-	FlowElementMap         map[string]FlowElement
+	FlowElementList        []delegate.FlowElement
+	InitialFlowElement     delegate.FlowElement
+	FlowElementMap         map[string]delegate.FlowElement
 }
 
-func (process Process) GetFlowElement(flowElementId string) FlowElement {
+func (process Process) GetFlowElement(flowElementId string) delegate.FlowElement {
 	return process.FlowElementMap[flowElementId]
 }
 
-func (process *Process) AddFlowElement(element FlowElement) {
+func (process *Process) AddFlowElement(element delegate.FlowElement) {
 	process.FlowElementList = append(process.FlowElementList, element)
 	process.FlowElementMap[element.GetId()] = element
 }

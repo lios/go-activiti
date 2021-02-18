@@ -1,47 +1,46 @@
 package model
 
 import (
-	. "github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 //父类实现体
 type FlowNode struct {
-	BaseHandlerType
+	delegate.BaseHandlerType
 	Id                string `xml:"id,attr"`
 	Name              string `xml:"name,attr"`
-	IncomingFlow      []FlowElement
-	OutgoingFlow      []FlowElement
-	SourceFlowElement FlowElement
-	TargetFlowElement FlowElement
+	IncomingFlow      []delegate.FlowElement
+	OutgoingFlow      []delegate.FlowElement
+	SourceFlowElement delegate.FlowElement
+	TargetFlowElement delegate.FlowElement
 	Behavior          delegate.ActivityBehavior
 }
 
-func (flow *FlowNode) SetIncoming(f []FlowElement) {
+func (flow *FlowNode) SetIncoming(f []delegate.FlowElement) {
 	flow.IncomingFlow = f
 }
-func (flow *FlowNode) SetOutgoing(f []FlowElement) {
+func (flow *FlowNode) SetOutgoing(f []delegate.FlowElement) {
 	flow.OutgoingFlow = f
 }
 
-func (flow *FlowNode) GetIncoming() []FlowElement {
+func (flow *FlowNode) GetIncoming() []delegate.FlowElement {
 	return flow.IncomingFlow
 }
-func (flow *FlowNode) GetOutgoing() []FlowElement {
+func (flow *FlowNode) GetOutgoing() []delegate.FlowElement {
 	return flow.OutgoingFlow
 }
 
-func (flow *FlowNode) SetSourceFlowElement(f FlowElement) {
+func (flow *FlowNode) SetSourceFlowElement(f delegate.FlowElement) {
 	flow.SourceFlowElement = f
 }
-func (flow *FlowNode) SetTargetFlowElement(f FlowElement) {
+func (flow *FlowNode) SetTargetFlowElement(f delegate.FlowElement) {
 	flow.TargetFlowElement = f
 }
 
-func (flow *FlowNode) GetSourceFlowElement() FlowElement {
+func (flow *FlowNode) GetSourceFlowElement() delegate.FlowElement {
 	return flow.SourceFlowElement
 }
-func (flow *FlowNode) GetTargetFlowElement() FlowElement {
+func (flow *FlowNode) GetTargetFlowElement() delegate.FlowElement {
 	return flow.TargetFlowElement
 }
 

@@ -1,4 +1,4 @@
-package bpmn
+package delegate
 
 //通用字段
 type BaseElement interface {

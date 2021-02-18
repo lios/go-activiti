@@ -1,10 +1,11 @@
 package entity
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"github.com/lios/go-activiti/model"
 	"reflect"
+	"time"
 )
 
 var (
@@ -14,6 +15,10 @@ var (
 
 type HistoricActivityInstanceEntityManagerImpl struct {
 	DefaultHistoryManager
+}
+
+func init() {
+	//historicActinstDataManager = HistoricActinstDataManager{}
 }
 
 func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManagerImpl) GetDataManager() DataManagers {
@@ -36,7 +41,9 @@ func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManage
 	historicActinst := model.HistoricActinst{}
 	historicActinst.ProcessDefineId = entity.GetProcessDefineId()
 	historicActinst.ProcessInstanceId = entity.GetProcessInstanceId()
+	historicActinst.TaskId = entity.GetTaskId()
 	historicActinst.ActId = entity.GetCurrentActivityId()
+	historicActinst.StartTime = time.Now()
 	if entity.GetCurrentFlowElement() != nil {
 		historicActinst.ActName = entity.GetCurrentFlowElement().GetName()
 		historicActinst.ActType = parseActivityType(entity.GetCurrentFlowElement())
@@ -45,7 +52,7 @@ func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManage
 
 }
 
-func parseActivityType(element bpmn.FlowElement) string {
+func parseActivityType(element delegate.FlowElement) string {
 	typeOf := reflect.TypeOf(element)
 	return typeOf.Name()
 }

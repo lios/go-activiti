@@ -2,12 +2,12 @@ package behavior
 
 import (
 	. "github.com/lios/go-activiti/engine/contanst"
-	. "github.com/lios/go-activiti/engine/delegate"
 	"github.com/lios/go-activiti/engine/event"
 	. "github.com/lios/go-activiti/engine/event/impl"
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/handler"
-	"github.com/lios/go-activiti/engine/impl/invocation"
+	"github.com/lios/go-activiti/engine/impl/interceptor"
 	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	. "github.com/lios/go-activiti/model"
@@ -20,7 +20,7 @@ type UserTaskActivityBehavior struct {
 }
 
 //普通用户节点处理
-func (user UserTaskActivityBehavior) Execute(execution DelegateExecution) (err error) {
+func (user UserTaskActivityBehavior) Execute(execution delegate.DelegateExecution) (err error) {
 	task := Task{}
 	task.ProcessInstanceId = execution.GetProcessInstanceId()
 	task.Assignee = user.UserTask.Assignee
@@ -29,7 +29,7 @@ func (user UserTaskActivityBehavior) Execute(execution DelegateExecution) (err e
 	task.TaskDefineName = user.UserTask.Name
 	taskManager := manager.GetDataManager().TaskDataManager
 	taskManager.Task = task
-	err = taskManager.Insert(execution)
+	err = taskManager.Insert(&task)
 	if err != nil {
 		return err
 	}
@@ -86,5 +86,5 @@ func (user UserTaskActivityBehavior) Trigger(execution entity.ExecutionEntity) {
 func (user UserTaskActivityBehavior) Leave(execution entity.ExecutionEntity) {
 	element := execution.GetCurrentFlowElement()
 	execution.SetCurrentFlowElement(element)
-	invocation.GetAgenda().PlanTakeOutgoingSequenceFlowsOperation(execution, true)
+	interceptor.GetAgenda().Agenda.PlanTakeOutgoingSequenceFlowsOperation(execution, true)
 }

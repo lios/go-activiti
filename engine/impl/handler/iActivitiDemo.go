@@ -3,21 +3,21 @@ package handler
 import (
 	"fmt"
 	"github.com/lios/go-activiti/engine/contanst"
-	. "github.com/lios/go-activiti/engine/delegate"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 func init() {
 	RegisterConstructor("userAuto", NewTestIActiviti)
 }
 
-func NewTestIActiviti(entity DelegateExecution) IActiviti {
+func NewTestIActiviti(entity delegate.DelegateExecution) IActiviti {
 	return &TestIActiviti{
 		Entity: entity,
 	}
 }
 
 type TestIActiviti struct {
-	Entity DelegateExecution
+	Entity delegate.DelegateExecution
 	InPut  string
 	OutPut string
 }

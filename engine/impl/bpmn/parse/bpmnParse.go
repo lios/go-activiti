@@ -1,10 +1,10 @@
 package parse
 
 import (
-	. "github.com/lios/go-activiti/engine/impl/bpmn"
 	. "github.com/lios/go-activiti/engine/impl/bpmn/model"
 	"github.com/lios/go-activiti/engine/impl/bpmn/parse/factory"
 	"github.com/lios/go-activiti/engine/impl/converter"
+	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/logger"
 )
@@ -16,7 +16,7 @@ type BpmnParse struct {
 	ActivityBehaviorFactory factory.ActivityBehaviorFactory
 	BpmnParserHandlers      BpmnParseHandlers
 	BpmnModel               *BpmnModel
-	CurrentFlowElement      FlowElement
+	CurrentFlowElement      delegate.FlowElement
 	CurrentProcess          *Process
 	ProcessDefinitions      []ProcessDefinitionEntity
 }
@@ -56,11 +56,11 @@ func (bpmnParse *BpmnParse) applyParseHandlers() {
 	}
 }
 
-func (bpmnParse *BpmnParse) SetCurrentFlowElement(currentFlowElement FlowElement) {
+func (bpmnParse *BpmnParse) SetCurrentFlowElement(currentFlowElement delegate.FlowElement) {
 	bpmnParse.CurrentFlowElement = currentFlowElement
 }
 
-func (bpmnParse *BpmnParse) ProcessFlowElements(flowElements []FlowElement) {
+func (bpmnParse *BpmnParse) ProcessFlowElements(flowElements []delegate.FlowElement) {
 	for _, element := range flowElements {
 		bpmnParse.BpmnParserHandlers.ParseElement(bpmnParse, element)
 	}

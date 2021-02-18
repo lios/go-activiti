@@ -1,16 +1,15 @@
 package delegate
 
 import (
-	"github.com/lios/go-activiti/engine/impl/bpmn"
 	"github.com/lios/go-activiti/engine/variable"
 )
 
 type DelegateExecution interface {
 	SetBusinessKey(businessKey string)
 
-	GetCurrentFlowElement() bpmn.FlowElement
+	GetCurrentFlowElement() FlowElement
 
-	SetCurrentFlowElement(flow bpmn.FlowElement)
+	SetCurrentFlowElement(flow FlowElement)
 
 	GetDeploymentId() int
 
