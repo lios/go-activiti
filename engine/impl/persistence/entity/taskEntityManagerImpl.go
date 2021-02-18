@@ -2,6 +2,8 @@ package entity
 
 import (
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+	"github.com/lios/go-activiti/logger"
+	. "github.com/lios/go-activiti/model"
 )
 
 var (
@@ -54,4 +56,43 @@ func (taskEntityManager TaskEntityManagerImpl) FindByProcessInstanceId(processIn
 		taskEntitys = append(taskEntitys, taskEntity)
 	}
 	return taskEntitys, nil
+}
+
+func (taskEntityManager TaskEntityManagerImpl) Insert(task Task) error {
+	dataManager := taskEntityManager.GetDataManager()
+	err := dataManager.Insert(&task)
+	if err != nil {
+		logger.Error("create task err:", err)
+		return err
+	}
+	taskEntityManager.recordTaskCreated(task)
+	return err
+}
+
+func (taskEntityManager TaskEntityManagerImpl) recordTaskCreated(task Task) (err error) {
+	manager := GetHistoricTaskInstanceEntityManager().GetDataManager()
+	historicTaskManager := manager.(HistoricTaskDataManager)
+	historicTask := taskEntityManager.createHistoricTask(task)
+	err = historicTaskManager.Insert(&historicTask)
+	if err != nil {
+		logger.Error("create task err:", err)
+		return err
+	}
+	entityManager := GetHistoricActivityInstanceEntityManager()
+	entityManager.RecordTaskId(task)
+	return err
+}
+
+func (taskEntityManager TaskEntityManagerImpl) createHistoricTask(task Task) HistoricTask {
+	historicTask := HistoricTask{}
+	//historicTask.TaskEntity = task.TaskEntity
+	historicTask.TaskId = task.Id
+	historicTask.ProcessInstanceId = task.ProcessInstanceId
+	historicTask.StartTime = task.StartTime
+	historicTask.TenantId = task.TenantId
+	historicTask.Assignee = task.Assignee
+	historicTask.TaskDefineKey = task.TaskDefineKey
+	historicTask.DeploymentId = task.DeploymentId
+	historicTask.TaskDefineName = task.TaskDefineName
+	return historicTask
 }

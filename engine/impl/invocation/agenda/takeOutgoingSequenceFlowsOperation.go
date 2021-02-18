@@ -4,6 +4,7 @@ import (
 	"github.com/lios/go-activiti/engine/impl/bpmn/model"
 	"github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/engine/impl/interceptor"
+	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	"github.com/lios/go-activiti/engine/impl/utils"
 )
 
@@ -87,7 +88,7 @@ func (task TakeOutgoingSequenceFlowsOperation) getCurrentFlowElement() delegate.
 }
 
 func (task TakeOutgoingSequenceFlowsOperation) handleActivityEnd(element delegate.FlowElement) (err error) {
-	//historicActinstManager := manager.DataManager{}.HistoricActinstDataManager
-	//err = historicActinstManager.RecordTaskCreated(element, task.Execution)
+	dataManager := entity.GetHistoricActivityInstanceEntityManager()
+	err = dataManager.RecordTaskCreated(element, task.Execution)
 	return err
 }

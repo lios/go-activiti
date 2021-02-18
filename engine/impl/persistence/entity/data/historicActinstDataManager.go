@@ -9,7 +9,6 @@ import (
 
 type HistoricActinstDataManager struct {
 	AbstractDataManager
-	HistoricActinst HistoricActinst
 }
 
 func (historicActinstManager HistoricActinstDataManager) FindUnfinishedHistoricActivityInstancesByExecutionAndActivityId(processInstanceId int64, actId string) (HistoricActinst, error) {
@@ -22,18 +21,18 @@ func (historicActinstManager HistoricActinstDataManager) FindUnfinishedHistoricA
 	return historicActinst, nil
 }
 
-func (historicActinstManager HistoricActinstDataManager) Update() (err error) {
-	err = db.DB().Model(&HistoricActinst{}).Where("act_id = ?", historicActinstManager.HistoricActinst.ActId).
-		Where("proc_inst_id = ?", historicActinstManager.HistoricActinst.ProcessInstanceId).
-		Update(&historicActinstManager.HistoricActinst).Error
+func (historicActinstManager HistoricActinstDataManager) Update(historicActinst HistoricActinst) (err error) {
+	err = db.DB().Model(&HistoricActinst{}).Where("act_id = ?", historicActinst.ActId).
+		Where("proc_inst_id = ?", historicActinst.ProcessInstanceId).
+		Update(&historicActinst).Error
 	if err != nil {
 		log.Infoln("Update HistoricActinst err: ", err)
 	}
 	return err
 }
-func (historicActinstManager HistoricActinstDataManager) UpdateProcessInstanceId() (err error) {
-	err = db.DB().Model(&HistoricActinst{}).Where("proc_inst_id = ?", historicActinstManager.HistoricActinst.ProcessInstanceId).
-		Update(&historicActinstManager.HistoricActinst).Error
+func (historicActinstManager HistoricActinstDataManager) UpdateProcessInstanceId(historicActinst HistoricActinst) (err error) {
+	err = db.DB().Model(&HistoricActinst{}).Where("proc_inst_id = ?", historicActinst.ProcessInstanceId).
+		Update(&historicActinst).Error
 	if err != nil {
 		log.Infoln("Update HistoricActinst err: ", err)
 	}

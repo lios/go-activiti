@@ -30,7 +30,6 @@ func (historicProcessManager HistoricProcessDataManager) MarkEnded() (err error)
 	historicActinst.EndTime = historicProcess.EndTime
 	historicProcess.ProcessInstanceId = historicProcess.Id
 	historicActinstManager := HistoricActinstDataManager{}
-	historicActinstManager.HistoricActinst = historicActinst
-	err = historicActinstManager.UpdateProcessInstanceId()
+	err = historicActinstManager.UpdateProcessInstanceId(historicActinst)
 	return err
 }

@@ -9,6 +9,7 @@ import (
 )
 
 type HistoricTaskDataManager struct {
+	TableModel
 	HistoricTask
 	AbstractDataManager
 	HistoricTaskModel HistoricTask

@@ -3,8 +3,7 @@ package entity
 import (
 	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
-	"github.com/lios/go-activiti/model"
-	"reflect"
+	. "github.com/lios/go-activiti/model"
 	"time"
 )
 
@@ -38,7 +37,7 @@ func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManage
 func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManagerImpl) RecordActivityStart(entity ExecutionEntity) {
 	manager := historicActivityInstanceEntityManager.GetDataManager()
 	actinstDataManager := manager.(HistoricActinstDataManager)
-	historicActinst := model.HistoricActinst{}
+	historicActinst := HistoricActinst{}
 	historicActinst.ProcessDefineId = entity.GetProcessDefineId()
 	historicActinst.ProcessInstanceId = entity.GetProcessInstanceId()
 	historicActinst.TaskId = entity.GetTaskId()
@@ -52,7 +51,29 @@ func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManage
 
 }
 
+func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManagerImpl) RecordTaskCreated(element delegate.FlowElement, entity ExecutionEntity) (err error) {
+	var actinst = HistoricActinst{}
+	manager := historicActivityInstanceEntityManager.GetDataManager()
+	actinstDataManager := manager.(HistoricActinstDataManager)
+	actinst, err = actinstDataManager.FindUnfinishedHistoricActivityInstancesByExecutionAndActivityId(entity.GetProcessInstanceId(), element.GetId())
+	if err == nil {
+		actinst.EndTime = time.Now()
+		err = actinstDataManager.Update(actinst)
+	}
+	return err
+}
+
 func parseActivityType(element delegate.FlowElement) string {
-	typeOf := reflect.TypeOf(element)
-	return typeOf.Name()
+	return element.GetHandlerType()
+}
+
+func (historicActivityInstanceEntityManager HistoricActivityInstanceEntityManagerImpl) RecordTaskId(task Task) {
+	manager := historicActivityInstanceEntityManager.GetDataManager()
+	actinstDataManager := manager.(HistoricActinstDataManager)
+	actinst, err := actinstDataManager.FindUnfinishedHistoricActivityInstancesByExecutionAndActivityId(task.ProcessInstanceId, task.TaskDefineKey)
+	if err == nil {
+		actinst.Assignee = task.Assignee
+		actinst.TaskId = task.Id
+		err = actinstDataManager.Update(actinst)
+	}
 }
