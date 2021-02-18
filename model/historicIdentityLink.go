@@ -12,3 +12,7 @@ type HistoricIdentityLink struct {
 func (HistoricIdentityLink) TableName() string {
 	return "hi_identity_link"
 }
+
+func (HistoricIdentityLink) getTableName() string {
+	return "hi_identity_link"
+}

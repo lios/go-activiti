@@ -12,3 +12,7 @@ type IdentityLink struct {
 func (IdentityLink) TableName() string {
 	return "identity_link"
 }
+
+func (IdentityLink) getTableName() string {
+	return "identity_link"
+}

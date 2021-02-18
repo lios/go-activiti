@@ -22,6 +22,10 @@ func (Variable) TableName() string {
 	return "variable"
 }
 
+func (Variable) getTableName() string {
+	return "variable"
+}
+
 func (variable Variable) GetName() string {
 	return variable.Name
 }

@@ -22,3 +22,7 @@ type HistoricProcess struct {
 func (HistoricProcess) TableName() string {
 	return "hi_process_instance"
 }
+
+func (HistoricProcess) getTableName() string {
+	return "hi_process_instance"
+}

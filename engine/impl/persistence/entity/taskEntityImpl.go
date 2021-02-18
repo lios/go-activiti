@@ -23,19 +23,19 @@ type TaskEntityImpl struct {
 func (taskEntiy TaskEntityImpl) GetTaskName() string {
 	return taskEntiy.TaskName
 }
-func (taskEntiy TaskEntityImpl) SetAssignee(assignee string) {
+func (taskEntiy *TaskEntityImpl) SetAssignee(assignee string) {
 	taskEntiy.assignee = assignee
 }
 
-func (taskEntiy TaskEntityImpl) SetStartTime(startTime time.Time) {
+func (taskEntiy *TaskEntityImpl) SetStartTime(startTime time.Time) {
 	taskEntiy.startTime = startTime
 }
 
-func (taskEntiy TaskEntityImpl) SetTaskDefineKey(taskDefineKey string) {
+func (taskEntiy *TaskEntityImpl) SetTaskDefineKey(taskDefineKey string) {
 	taskEntiy.taskDefineKey = taskDefineKey
 }
 
-func (taskEntiy TaskEntityImpl) SetTaskDefineName(taskDefineName string) {
+func (taskEntiy *TaskEntityImpl) SetTaskDefineName(taskDefineName string) {
 	taskEntiy.taskDefineName = taskDefineName
 }
 func (taskEntiy TaskEntityImpl) GetById(id int64) Entity {
@@ -52,7 +52,7 @@ func (taskEntiy TaskEntityImpl) GetTaskId() int64 {
 	return taskEntiy.TaskId
 }
 
-func (taskEntiy TaskEntityImpl) SetTaskId(taskId int64) {
+func (taskEntiy *TaskEntityImpl) SetTaskId(taskId int64) {
 	taskEntiy.TaskId = taskId
 }
 
@@ -78,12 +78,12 @@ func (taskEntiy TaskEntityImpl) getExecution() ExecutionEntity {
 	}
 	return nil
 }
-func (taskEntiy TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
+func (taskEntiy *TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
 	if taskEntiy.getExecution() != nil {
 		taskEntiy.execution.SetVariableLocal(variables)
 	}
 	return nil
 }
-func (taskEntiy TaskEntityImpl) SetScope(variable *Variable) {
+func (taskEntiy *TaskEntityImpl) SetScope(variable *Variable) {
 	variable.TaskId = taskEntiy.TaskId
 }

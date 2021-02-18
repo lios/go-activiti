@@ -13,3 +13,7 @@ type Bytearry struct {
 func (Bytearry) TableName() string {
 	return "bytearry"
 }
+
+func (Bytearry) getTableName() string {
+	return "bytearry"
+}

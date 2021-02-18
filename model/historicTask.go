@@ -20,3 +20,7 @@ type HistoricTask struct {
 func (HistoricTask) TableName() string {
 	return "hi_task"
 }
+
+func (HistoricTask) getTableName() string {
+	return "hi_task"
+}

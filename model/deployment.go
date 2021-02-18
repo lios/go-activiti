@@ -15,3 +15,7 @@ type Deployment struct {
 func (Deployment) TableName() string {
 	return "deployment"
 }
+
+func (Deployment) getTableName() string {
+	return "deployment"
+}

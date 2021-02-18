@@ -1,12 +1,11 @@
 package entity
 
 import (
-	delegate2 "github.com/lios/go-activiti/engine/impl/delegate"
+	. "github.com/lios/go-activiti/engine/impl/delegate"
 )
 
 type ExecutionEntity interface {
-	delegate2.DelegateExecution
-	Entity
+	DelegateExecution
 	//SetBusinessKey(businessKey string)
 	//
 	//GetCurrentFlowElement() bpmn.FlowElement

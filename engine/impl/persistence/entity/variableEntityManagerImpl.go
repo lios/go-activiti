@@ -14,6 +14,9 @@ type VariableEntityManagerImpl struct {
 	AbstractEntityManager
 }
 
+//func init() {
+//	variableDataManager = VariableDataManager{AbstractDataManager:AbstractDataManager{TableModel{AbstractModel(Variable{})}}}
+//}
 func (variableEntityManager VariableEntityManagerImpl) GetDataManager() DataManagers {
 	return variableDataManager
 }

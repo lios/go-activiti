@@ -11,6 +11,10 @@ var (
 	taskDataManager TaskDataManager
 )
 
+func init() {
+	taskDataManager = TaskDataManager{AbstractDataManager: AbstractDataManager{TableModel{AbstractModel(Task{})}}}
+}
+
 type TaskEntityManagerImpl struct {
 	AbstractEntityManager
 }
@@ -19,7 +23,9 @@ func (taskEntityManager TaskEntityManagerImpl) GetDataManager() DataManagers {
 	return taskDataManager
 }
 func (taskEntityManager TaskEntityManagerImpl) DeleteTask(task TaskEntity) (err error) {
-	taskEntityManager.Delete(task)
+	manager := taskEntityManager.GetDataManager()
+	dataManager := manager.(TaskDataManager)
+	dataManager.Delete(task.GetId())
 	if err != nil {
 		return err
 	}
@@ -58,9 +64,14 @@ func (taskEntityManager TaskEntityManagerImpl) FindByProcessInstanceId(processIn
 	return taskEntitys, nil
 }
 
-func (taskEntityManager TaskEntityManagerImpl) Insert(task Task) error {
-	dataManager := taskEntityManager.GetDataManager()
-	err := dataManager.Insert(&task)
+func (taskEntityManager TaskEntityManagerImpl) InsertTask(taskEntity TaskEntityImpl) error {
+	//dataManager := taskEntityManager.GetDataManager()
+	task := Task{}
+	task.ProcessInstanceId = taskEntity.GetProcessInstanceId()
+	task.TaskDefineKey = taskEntity.taskDefineKey
+	task.TaskDefineName = taskEntity.taskDefineName
+	task.StartTime = taskEntity.startTime
+	err := taskEntityManager.Insert(&task)
 	if err != nil {
 		logger.Error("create task err:", err)
 		return err

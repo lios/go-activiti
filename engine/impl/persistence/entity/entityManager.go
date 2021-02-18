@@ -12,7 +12,22 @@ var (
 	historicActivityInstanceEntityManager HistoricActivityInstanceEntityManagerImpl
 	deploymentEntityManager               DeploymentEntityManagerImpl
 	resourceEntityManager                 ResourceEntityManagerImpl
+	historicIdentityLinkEntityManager     HistoricIdentityLinkEntityManagerImpl
 )
+
+func init() {
+	processDefinitionEntityManager = ProcessDefinitionEntityManagerImpl{AbstractEntityManager{ProcessDefinitionEntityManagerImpl{}}}
+	executionEntityManager = ExecutionEntityManagerImpl{AbstractEntityManager{ExecutionEntityManagerImpl{}}}
+	taskEntity = TaskEntityManagerImpl{AbstractEntityManager{TaskEntityManagerImpl{}}}
+	variableEntityManager = VariableEntityManagerImpl{AbstractEntityManager{VariableEntityManagerImpl{}}}
+	identityLinkManager = IdentityLinkEntityManagerImpl{AbstractEntityManager{IdentityLinkEntityManagerImpl{}}}
+	historicTaskInstanceEntityManager = HistoricTaskInstanceEntityManagerImpl{AbstractEntityManager: AbstractEntityManager{HistoricTaskInstanceEntityManagerImpl{}}}
+	historicActivityInstanceEntityManager = HistoricActivityInstanceEntityManagerImpl{AbstractEntityManager: AbstractEntityManager{HistoricActivityInstanceEntityManagerImpl{}}}
+	deploymentEntityManager = DeploymentEntityManagerImpl{AbstractEntityManager{DeploymentEntityManagerImpl{}}}
+	resourceEntityManager = ResourceEntityManagerImpl{AbstractEntityManager{ResourceEntityManagerImpl{}}}
+	historicIdentityLinkEntityManager = HistoricIdentityLinkEntityManagerImpl{AbstractEntityManager{HistoricIdentityLinkEntityManagerImpl{}}}
+
+}
 
 type EntityManager interface {
 	GetDataManager() data.DataManagers
@@ -42,7 +57,7 @@ func GetExecutionEntityManager() ExecutionEntityManagerImpl {
 	return executionEntityManager
 }
 
-func GetIdentityLinkManager() IdentityLinkEntityManager {
+func GetIdentityLinkManager() IdentityLinkEntityManagerImpl {
 	return identityLinkManager
 }
 
@@ -56,4 +71,8 @@ func GetHistoricTaskInstanceEntityManager() HistoricTaskInstanceEntityManagerImp
 
 func GetHistoricActivityInstanceEntityManager() HistoricActivityInstanceEntityManagerImpl {
 	return historicActivityInstanceEntityManager
+}
+
+func GetHistoricIdentityLinkEntityManager() HistoricIdentityLinkEntityManagerImpl {
+	return historicIdentityLinkEntityManager
 }

@@ -16,7 +16,6 @@ func (user UserTaskXMLConverter) GetXMLElementName() string {
 }
 
 func (user UserTaskXMLConverter) ConvertXMLToElement(decoder *Decoder, token StartElement, model *BpmnModel, activeProcess *Process) delegate.BaseElement {
-
 	userTask := UserTask{FlowNode: FlowNode{BaseHandlerType: delegate.BaseHandlerType(UserTask{}), IncomingFlow: make([]delegate.FlowElement, 0), OutgoingFlow: make([]delegate.FlowElement, 0)}}
 	decoder.DecodeElement(&userTask, &token)
 	return &userTask

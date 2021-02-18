@@ -10,7 +10,6 @@ import (
 type VariableDataManager struct {
 	Variable
 	AbstractDataManager
-	VariableModel *Variable
 }
 
 func (define VariableDataManager) Create(name string, variableType VariableType, value interface{}) *Variable {

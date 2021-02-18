@@ -7,23 +7,6 @@ import (
 
 type AbstractDataManager struct {
 	model.TableModel
-	//GetTaskEntityManager() TaskDataManager
-	//
-	//GetDefineEntityManager() DefineDataManager
-	//
-	//GetDeploymentDataManager() DeploymentDataManager
-	//
-	//GetVariableEntityManager() VariableDataManager
-	//
-	//GetIdentityLinkEntityManager() IdentityLinkDataManager
-	//
-	//GetHistoricActinstEntityManager() HistoricActinstDataManager
-	//
-	//GetHistoricTaskEntityManager() HistoricTaskDataManager
-	//
-	//GetHistoricProcessEntityManager() HistoricProcessDataManager
-	//
-	//GetResourceDataManager() ResourceDataManager
 }
 
 func (dataManagers AbstractDataManager) Insert(data interface{}) error {

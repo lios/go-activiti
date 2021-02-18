@@ -21,6 +21,6 @@ func (ProcessInstance) TableName() string {
 	return "process_instance"
 }
 
-func (processInstance ProcessInstance) setBusinessKey(businessKey string) {
-	processInstance.BusinessKey = businessKey
+func (ProcessInstance) getTableName() string {
+	return "process_instance"
 }

@@ -1,14 +1,16 @@
 package entity
 
-import "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+import (
+	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+)
 
-var resourceDataManager data.ResourceDataManager
+var resourceDataManager ResourceDataManager
 
 type ResourceEntityManagerImpl struct {
-	AbstractEntity
+	AbstractEntityManager
 }
 
-func (resourceEntityManager ResourceEntityManagerImpl) GetDataManager() data.DataManagers {
+func (resourceEntityManager ResourceEntityManagerImpl) GetDataManager() DataManagers {
 	return resourceDataManager
 }
 

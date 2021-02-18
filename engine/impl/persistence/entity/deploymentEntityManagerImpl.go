@@ -14,6 +14,10 @@ type DeploymentEntityManagerImpl struct {
 	AbstractEntityManager
 }
 
+func init() {
+	deploymentDataManager = DeploymentDataManager{AbstractDataManager: AbstractDataManager{TableModel{AbstractModel(Deployment{})}}}
+}
+
 func (deploymentEntity DeploymentEntityManagerImpl) GetDataManager() DataManagers {
 	return deploymentDataManager
 }

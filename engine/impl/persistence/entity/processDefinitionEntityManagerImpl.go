@@ -2,23 +2,26 @@ package entity
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/lios/go-activiti/engine/impl/persistence/entity/data"
+	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	"github.com/lios/go-activiti/logger"
-	"github.com/lios/go-activiti/model"
+	. "github.com/lios/go-activiti/model"
 )
 
-var processInstanceDataManager data.DefineDataManager
+var processInstanceDataManager DefineDataManager
 
 type ProcessDefinitionEntityManagerImpl struct {
 	AbstractEntityManager
 }
 
-func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) GetDataManager() data.DataManagers {
+func init() {
+	processInstanceDataManager = DefineDataManager{AbstractDataManager: AbstractDataManager{TableModel{AbstractModel(Bytearry{})}}}
+}
+func (processDefinitionEntityManager ProcessDefinitionEntityManagerImpl) GetDataManager() DataManagers {
 	return resourceDataManager
 }
 
-func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindProcessDefinitionById(processDefinitionId int64) ProcessDefinitionEntity {
-	bytearry := model.Bytearry{}
+func (processDefinitionEntityManager ProcessDefinitionEntityManagerImpl) FindProcessDefinitionById(processDefinitionId int64) ProcessDefinitionEntity {
+	bytearry := Bytearry{}
 	defineEntityManager := processInstanceDataManager
 	defineEntityManager.FindById(processDefinitionId, &bytearry)
 	definitionEntityImpl := ProcessDefinitionEntityImpl{}
@@ -27,7 +30,7 @@ func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindPr
 	definitionEntityImpl.SetDeploymentId(bytearry.DeploymentId)
 	return &definitionEntityImpl
 }
-func (processDefinitionEntityManager *ProcessDefinitionEntityManagerImpl) FindLatestProcessDefinitionByKey(processDefinitionKey string) (ProcessDefinitionEntity, error) {
+func (processDefinitionEntityManager ProcessDefinitionEntityManagerImpl) FindLatestProcessDefinitionByKey(processDefinitionKey string) (ProcessDefinitionEntity, error) {
 	defineEntityManager := processInstanceDataManager
 	bytearry, err := defineEntityManager.FindDeployedProcessDefinitionByKey(processDefinitionKey)
 	if err != nil && err != gorm.ErrRecordNotFound {

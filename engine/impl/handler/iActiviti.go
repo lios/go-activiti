@@ -4,6 +4,7 @@ import (
 	. "github.com/lios/go-activiti/engine/contanst"
 	delegate2 "github.com/lios/go-activiti/engine/impl/delegate"
 	"github.com/lios/go-activiti/errs"
+	"github.com/lios/go-activiti/logger"
 	"reflect"
 	"sync"
 )
@@ -39,6 +40,7 @@ func GetConstructorByName(name string) (ActivitiConstructor, error) {
 	defer lock.Unlock()
 	constructor, ok := gConstructorMap[name]
 	if !ok {
+		logger.Error("not find Constructor handle name:", name)
 		return nil, errs.ProcessError{Code: "1006", Msg: "name not find"}
 	}
 	return constructor, nil

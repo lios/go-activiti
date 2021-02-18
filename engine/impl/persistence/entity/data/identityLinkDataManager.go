@@ -8,8 +8,8 @@ import (
 )
 
 type IdentityLinkDataManager struct {
-	DataManagers
-	IdentityLink IdentityLink
+	IdentityLink
+	AbstractDataManager
 }
 
 //创建流程实例
@@ -62,8 +62,6 @@ func (identityLinkManager IdentityLinkDataManager) createHistoricIdentityLink() 
 	historicIdentityLink.UserId = identityLink.UserId
 	historicIdentityLink.TaskId = identityLink.TaskId
 	historicIdentityLink.ProcessInstanceId = identityLink.ProcessInstanceId
-	historicIdentityLinkManager := HistoricIdentityLinkDataManager{}
-	historicIdentityLinkManager.HistoricIdentityLink = historicIdentityLink
-	err = historicIdentityLinkManager.Insert(&historicIdentityLinkManager)
+	err = identityLinkManager.Insert(&historicIdentityLink)
 	return err
 }

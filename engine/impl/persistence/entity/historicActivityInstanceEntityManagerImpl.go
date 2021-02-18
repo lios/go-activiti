@@ -12,7 +12,12 @@ var (
 	historicActinstDataManager     HistoricActinstDataManager
 )
 
+func init() {
+	historicActinstDataManager = HistoricActinstDataManager{AbstractDataManager: AbstractDataManager{TableModel{AbstractModel(HistoricActinst{})}}}
+}
+
 type HistoricActivityInstanceEntityManagerImpl struct {
+	AbstractEntityManager
 	DefaultHistoryManager
 }
 

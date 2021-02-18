@@ -15,5 +15,9 @@ func (userTaskParseHandler UserTaskParseHandler) GetHandledType() string {
 
 func (userTaskParseHandler UserTaskParseHandler) ExecuteParse(bpmnParse BpmnParse, baseElement delegate.BaseElement) {
 	userTask := baseElement.(*UserTask)
-	userTask.SetBehavior(bpmnParse.ActivityBehaviorFactory.CreateUserTaskActivityBehavior(*userTask))
+	if (userTask.CandidateGroups != nil && len(userTask.CandidateGroups) > 0) || (userTask.CandidateUsers != nil && len(userTask.CandidateUsers) > 0) {
+		userTask.SetBehavior(bpmnParse.ActivityBehaviorFactory.CreateUserTaskActivityBehavior(*userTask, bpmnParse.Name))
+	} else {
+		userTask.SetBehavior(bpmnParse.ActivityBehaviorFactory.CreateAutoUserTaskActivityBehavior(*userTask, bpmnParse.Name))
+	}
 }

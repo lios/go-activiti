@@ -8,7 +8,6 @@ import (
 	"github.com/lios/go-activiti/engine/impl/delegate"
 	. "github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/engine/impl/interceptor"
-	"github.com/lios/go-activiti/engine/impl/manager"
 	"github.com/lios/go-activiti/engine/impl/persistence/entity"
 	. "github.com/lios/go-activiti/model"
 	"time"
@@ -21,16 +20,15 @@ type UserTaskActivityBehavior struct {
 
 //普通用户节点处理
 func (user UserTaskActivityBehavior) Execute(execution delegate.DelegateExecution) (err error) {
-	task := Task{}
+	task := entity.TaskEntityImpl{}
 	task.ProcessInstanceId = execution.GetProcessInstanceId()
-	task.Assignee = user.UserTask.Assignee
-	task.StartTime = time.Now()
-	task.TaskDefineKey = user.UserTask.Id
-	task.TaskDefineName = user.UserTask.Name
+	task.SetAssignee(user.UserTask.Assignee)
+
+	task.SetStartTime(time.Now())
+	task.SetTaskDefineKey(user.UserTask.Id)
+	task.SetTaskDefineName(user.UserTask.Name)
 	taskEntityManager := entity.GetTaskEntityManager()
-	taskManager := manager.GetDataManager().TaskDataManager
-	taskManager.Task = task
-	err = taskEntityManager.Insert(task)
+	err = taskEntityManager.InsertTask(task)
 	if err != nil {
 		return err
 	}
@@ -68,9 +66,8 @@ func handleAssignments(user model.UserTask, taskId, processInstanceId int64) (er
 			link.TaskId = taskId
 			link.ProcessInstanceId = processInstanceId
 			link.UserId = user
-			identityLinkManager := manager.GetDataManager().IdentityLinkDataManager
-			identityLinkManager.IdentityLink = link
-			err = identityLinkManager.CreateIdentityLink()
+			identityLinkManager := entity.GetIdentityLinkManager()
+			err = identityLinkManager.CreateIdentityLink(link)
 			if err != nil {
 				return err
 			}
@@ -80,11 +77,11 @@ func handleAssignments(user model.UserTask, taskId, processInstanceId int64) (er
 }
 
 //普通用户节点处理
-func (user UserTaskActivityBehavior) Trigger(execution entity.ExecutionEntity) {
+func (user UserTaskActivityBehavior) Trigger(execution delegate.DelegateExecution) {
 	user.Leave(execution)
 }
 
-func (user UserTaskActivityBehavior) Leave(execution entity.ExecutionEntity) {
+func (user UserTaskActivityBehavior) Leave(execution delegate.DelegateExecution) {
 	element := execution.GetCurrentFlowElement()
 	execution.SetCurrentFlowElement(element)
 	interceptor.GetAgenda().Agenda.PlanTakeOutgoingSequenceFlowsOperation(execution, true)

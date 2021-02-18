@@ -11,10 +11,8 @@ import (
 )
 
 type TaskDataManager struct {
-	TableModel
 	Task
 	AbstractDataManager
-	TaskModel *Task
 }
 
 //func (taskManager TaskDataManager) Insert(execution entity2.ExecutionEntity) (err error) {
