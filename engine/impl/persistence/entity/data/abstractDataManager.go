@@ -26,7 +26,7 @@ func (dataManagers AbstractDataManager) FindById(id int64, data interface{}) err
 }
 func (dataManagers AbstractDataManager) Delete(id int64) error {
 	tableName := dataManagers.GetTableName()
-	err := db.DB().Where("id = ?", id).Table(tableName).Error
+	err := db.DB().Where("id = ?", id).Table(tableName).Delete(nil).Error
 	if err == nil {
 		return err
 	}

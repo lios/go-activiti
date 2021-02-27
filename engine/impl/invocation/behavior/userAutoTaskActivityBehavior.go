@@ -26,11 +26,10 @@ func (user UserAutoTaskActivityBehavior) Execute(execution delegate.DelegateExec
 	task.SetTaskDefineKey(user.UserTask.Id)
 	task.SetTaskDefineName(user.UserTask.Name)
 	dataManager := entity.GetTaskEntityManager()
-	err = dataManager.InsertTask(task)
+	err = dataManager.InsertTask(&task)
 	if err != nil {
 		return err
 	}
-	task.SetId(task.Id)
 	activitiConstructor, e := GetConstructorByName(user.ProcessKey)
 	if e != nil {
 		dataManager.DeleteTask(&task)

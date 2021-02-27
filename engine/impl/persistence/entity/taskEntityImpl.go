@@ -76,10 +76,7 @@ func (taskEntiy *TaskEntityImpl) getExecution() ExecutionEntity {
 	return nil
 }
 func (taskEntiy *TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
-	if taskEntiy.getExecution() != nil {
-		taskEntiy.SetVariableLocal(variables)
-	}
-	return nil
+	return taskEntiy.SetVariable(taskEntiy, variables)
 }
 func (taskEntiy *TaskEntityImpl) SetScope(variable *Variable) {
 	variable.TaskId = taskEntiy.TaskId

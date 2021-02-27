@@ -28,7 +28,7 @@ func (user UserTaskActivityBehavior) Execute(execution delegate.DelegateExecutio
 	task.SetTaskDefineKey(user.UserTask.Id)
 	task.SetTaskDefineName(user.UserTask.Name)
 	taskEntityManager := entity.GetTaskEntityManager()
-	err = taskEntityManager.InsertTask(task)
+	err = taskEntityManager.InsertTask(&task)
 	if err != nil {
 		return err
 	}

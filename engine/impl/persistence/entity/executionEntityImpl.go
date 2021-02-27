@@ -75,11 +75,12 @@ func (execution ExecutionEntityImpl) GetProcessVariable() map[string]interface{}
 }
 
 func (execution ExecutionEntityImpl) GetVariable() map[string]interface{} {
-	//variableManager := execution.GetVariableEntityManager()
-	//variables, err := variableManager.SelectByProcessInstanceId(execution.GetProcessInstanceId())
-	//if err == nil {
-	//	return execution.HandleVariable(variables)
-	//}
+	dateManager := GetVariableEntityManager().GetDataManager()
+	variableManager := dateManager.(VariableDataManager)
+	variables, err := variableManager.SelectByProcessInstanceId(execution.GetProcessInstanceId())
+	if err == nil {
+		return execution.HandleVariable(variables)
+	}
 	return nil
 }
 

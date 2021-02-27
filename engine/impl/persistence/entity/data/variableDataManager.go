@@ -22,26 +22,6 @@ func (define VariableDataManager) Create(name string, variableType VariableType,
 
 }
 
-func (defineManager VariableDataManager) createHistoricVariable() (err error) {
-	variable := defineManager.Variable
-	historicVariable := HistoricVariable{}
-
-	historicVariable.TaskId = variable.TaskId
-	historicVariable.ProcessInstanceId = variable.ProcessInstanceId
-	historicVariable.Name = variable.Name
-	historicVariable.Version = variable.Version
-	historicVariable.Type = variable.Type
-	historicVariable.Text = variable.Text
-	historicVariable.Number = variable.Number
-	historicVariable.Date = variable.Date
-	historicVariable.Float = variable.Float
-	historicVariable.Blob = variable.Blob
-
-	historicVariableManager := HistoricVariableDataManager{}
-	historicVariableManager.HistoricVariable = historicVariable
-	return historicVariableManager.Insert()
-}
-
 func (defineManager VariableDataManager) SelectProcessInstanceId(name string, processInstanceId int64) (Variable, error) {
 	variables := Variable{}
 	err := db.DB().Where("proc_inst_id = ?", processInstanceId).Where("name = ?", name).First(&variables).Error

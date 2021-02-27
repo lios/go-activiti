@@ -45,10 +45,10 @@ func (start StartProcessInstanceByKeyCmd) Execute(command interceptor.CommandCon
 	//execution.SetProcessDefineId(bytearries[0].Id)
 	execution.SetCurrentActivityId(element.GetId())
 	//保存流程变量
-	//err = entity.SetVariable(&execution, start.Variables)
-	//if err != nil {
-	//	return nil, err
-	//}
+	err = execution.SetVariable(&execution, start.Variables)
+	if err != nil {
+		return nil, err
+	}
 	context, err := interceptor.GetCommandContext()
 	if err == nil {
 		context.Agenda.PlanContinueProcessOperation(&execution)

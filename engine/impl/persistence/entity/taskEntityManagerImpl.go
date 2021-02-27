@@ -80,7 +80,7 @@ func (taskEntityManager TaskEntityManagerImpl) FindByProcessInstanceId(processIn
 	return taskEntitys, nil
 }
 
-func (taskEntityManager TaskEntityManagerImpl) InsertTask(taskEntity TaskEntityImpl) error {
+func (taskEntityManager TaskEntityManagerImpl) InsertTask(taskEntity *TaskEntityImpl) error {
 	//dataManager := taskEntityManager.GetDataManager()
 	task := Task{}
 	task.ProcessInstanceId = taskEntity.GetProcessInstanceId()
@@ -88,6 +88,7 @@ func (taskEntityManager TaskEntityManagerImpl) InsertTask(taskEntity TaskEntityI
 	task.TaskDefineName = taskEntity.taskDefineName
 	task.StartTime = taskEntity.startTime
 	err := taskEntityManager.Insert(&task)
+	taskEntity.SetId(task.Id)
 	if err != nil {
 		logger.Error("create task err:", err)
 		return err
