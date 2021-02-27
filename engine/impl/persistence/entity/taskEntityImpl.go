@@ -1,6 +1,7 @@
 package entity
 
 import (
+	. "github.com/lios/go-activiti/engine/impl/persistence/entity/data"
 	. "github.com/lios/go-activiti/engine/variable"
 	"time"
 )
@@ -35,17 +36,12 @@ func (taskEntiy *TaskEntityImpl) SetTaskDefineKey(taskDefineKey string) {
 	taskEntiy.taskDefineKey = taskDefineKey
 }
 
+func (taskEntiy *TaskEntityImpl) GetTaskDefineKey() string {
+	return taskEntiy.taskDefineKey
+}
+
 func (taskEntiy *TaskEntityImpl) SetTaskDefineName(taskDefineName string) {
 	taskEntiy.taskDefineName = taskDefineName
-}
-func (taskEntiy TaskEntityImpl) GetById(id int64) Entity {
-	taskEntityImpl := TaskEntityImpl{}
-	task, err := taskDataManager.GetById(id)
-	if err != nil {
-		return nil
-	}
-	taskEntityImpl.TaskName = task.TaskDefineName
-	return &taskEntityImpl
 }
 
 func (taskEntiy TaskEntityImpl) GetTaskId() int64 {
@@ -66,21 +62,22 @@ func (taskEntiy TaskEntityImpl) GetVariable() map[string]interface{} {
 }
 
 func (taskEntiy TaskEntityImpl) GetSpecificVariable(variableName string) (Variable, error) {
-	//variableManager := task.GetVariableEntityManager()
-	//return variableManager.SelectTaskId(variableName, taskEntiy.TaskId)
-	return Variable{}, nil
+	manager := GetVariableEntityManager().GetDataManager()
+	variableDataManager := manager.(VariableDataManager)
+	return variableDataManager.SelectTaskId(variableName, taskEntiy.TaskId)
 }
-func (taskEntiy TaskEntityImpl) getExecution() ExecutionEntity {
-	if taskEntiy.execution == nil && taskEntiy.executionId != 0 {
+func (taskEntiy *TaskEntityImpl) getExecution() ExecutionEntity {
+	if taskEntiy.execution == nil {
 		executionEntityManager := GetExecutionEntityManager()
-		entityImpl := executionEntityManager.FindById(taskEntiy.executionId)
+		entityImpl := executionEntityManager.FindById(taskEntiy.ProcessInstanceId)
 		taskEntiy.execution = &entityImpl
+		return &entityImpl
 	}
 	return nil
 }
 func (taskEntiy *TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
 	if taskEntiy.getExecution() != nil {
-		taskEntiy.execution.SetVariableLocal(variables)
+		taskEntiy.SetVariableLocal(variables)
 	}
 	return nil
 }

@@ -15,11 +15,10 @@ type TakeOutgoingSequenceFlowsOperation struct {
 
 func (task TakeOutgoingSequenceFlowsOperation) Run() (err error) {
 	currentFlowElement := task.getCurrentFlowElement()
-	_, ok := currentFlowElement.(*model.SequenceFlow)
-	if ok {
-		task.handleSequenceFlow()
-	} else {
+	if currentFlowElement.GetOutgoing() != nil {
 		err = task.handleFlowNode()
+	} else {
+		task.handleSequenceFlow()
 	}
 	return err
 }

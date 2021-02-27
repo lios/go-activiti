@@ -19,9 +19,10 @@ func (execut ExecutionEntityManagerImpl) GetDataManager() DataManagers {
 	return executionDataManager
 }
 func (execut ExecutionEntityManagerImpl) FindById(entityId int64) ExecutionEntityImpl {
-	execution := &Execution{}
+	execution := &ProcessInstance{}
 	execut.GetDataManager().FindById(entityId, execution)
 	entityImpl := ExecutionEntityImpl{}
 	entityImpl.SetId(execution.Id)
+	entityImpl.SetProcessDefineId(execution.ProcessDefineId)
 	return entityImpl
 }

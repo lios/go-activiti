@@ -18,9 +18,9 @@ type ProcessInstance struct {
 }
 
 func (ProcessInstance) TableName() string {
-	return "process_instance"
+	return "ru_process_instance"
 }
 
 func (ProcessInstance) getTableName() string {
-	return "process_instance"
+	return "ru_process_instance"
 }

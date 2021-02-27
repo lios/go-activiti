@@ -23,3 +23,7 @@ func (defaultActivityBehaviorFactory DefaultActivityBehaviorFactory) CreateExclu
 func (defaultActivityBehaviorFactory DefaultActivityBehaviorFactory) CreateInclusiveGatewayActivityBehavior(inclusiveGateway InclusiveGateway) InclusiveGatewayActivityBehavior {
 	return InclusiveGatewayActivityBehavior{}
 }
+
+func (defaultActivityBehaviorFactory DefaultActivityBehaviorFactory) CreateParallelGatewayActivityBehavior(inclusiveGateway ParallelGateway) ParallelGatewayActivityBehavior {
+	return ParallelGatewayActivityBehavior{}
+}

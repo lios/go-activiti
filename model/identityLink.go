@@ -10,9 +10,9 @@ type IdentityLink struct {
 }
 
 func (IdentityLink) TableName() string {
-	return "identity_link"
+	return "ru_identity_link"
 }
 
 func (IdentityLink) getTableName() string {
-	return "identity_link"
+	return "ru_identity_link"
 }

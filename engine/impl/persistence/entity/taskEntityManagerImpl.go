@@ -22,6 +22,22 @@ type TaskEntityManagerImpl struct {
 func (taskEntityManager TaskEntityManagerImpl) GetDataManager() DataManagers {
 	return taskDataManager
 }
+func (taskEntityManager TaskEntityManagerImpl) QueryTaskById(id int64) (taskEntity TaskEntity, err error) {
+	manager := taskEntityManager.GetDataManager()
+	task := Task{}
+	err = manager.FindById(id, &task)
+	if err != nil {
+		logger.Error("query task err :", err)
+		return nil, err
+	}
+	entityImpl := TaskEntityImpl{}
+	entityImpl.SetStartTime(task.StartTime)
+	entityImpl.SetProcessInstanceId(task.ProcessInstanceId)
+	entityImpl.SetId(task.Id)
+	entityImpl.SetTaskDefineKey(task.TaskDefineKey)
+	entityImpl.SetTaskDefineName(task.TaskDefineName)
+	return &entityImpl, nil
+}
 func (taskEntityManager TaskEntityManagerImpl) DeleteTask(task TaskEntity) (err error) {
 	manager := taskEntityManager.GetDataManager()
 	dataManager := manager.(TaskDataManager)

@@ -34,7 +34,7 @@ type EntityManager interface {
 
 	Insert(interface{}) error
 
-	GetById(id int64) Entity
+	GetById(id int64, data interface{}) interface{}
 
 	Delete(entity Entity)
 }

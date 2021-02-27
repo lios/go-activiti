@@ -19,11 +19,11 @@ type Variable struct {
 }
 
 func (Variable) TableName() string {
-	return "variable"
+	return "ru_variable"
 }
 
 func (Variable) getTableName() string {
-	return "variable"
+	return "ru_variable"
 }
 
 func (variable Variable) GetName() string {

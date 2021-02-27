@@ -123,7 +123,9 @@ func (execution ExecutionEntityImpl) HandleVariable(variables []Variable) map[st
 //}
 //	return nil
 //}
-
+func (execution ExecutionEntityImpl) GetSourceActivityExecution() ExecutionEntity {
+	return &execution
+}
 func (execution ExecutionEntityImpl) GetSpecificVariable(variableName string) (Variable, error) {
 	manager := GetVariableEntityManager().GetDataManager()
 	variableDataManager := manager.(VariableDataManager)

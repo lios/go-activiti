@@ -12,6 +12,7 @@ type AbstractVariableScopeImpl interface {
 }
 type VariableScopeImpl struct {
 	AbstractVariableScopeImpl
+	ExecutionEntity ExecutionEntity
 }
 
 func (variableScope VariableScopeImpl) SetVariableLocal(variables map[string]interface{}) error {

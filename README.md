@@ -32,7 +32,7 @@ db.GORM_DB.Transaction(func(tx *gorm.DB) error {
  })
 ```
 
-## **流程事件监听*
+## 流程事件监听
 需实现ActivitiEventListener，将实现类加入配置文件
 
 ```java

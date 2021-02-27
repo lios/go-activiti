@@ -8,6 +8,9 @@ import (
 	"github.com/lios/go-activiti/engine/impl/handler"
 	"github.com/lios/go-activiti/engine/impl/interceptor"
 	. "github.com/lios/go-activiti/engine/impl/persistence/entity"
+	"github.com/lios/go-activiti/engine/impl/utils"
+	"github.com/lios/go-activiti/errs"
+	"github.com/lios/go-activiti/logger"
 )
 
 type CompleteCmd struct {
@@ -35,18 +38,15 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 	if err != nil {
 		return err
 	}
-	//defineManager := command.ProcessEngineConfiguration.DefineDataManager
-	//bytearry, err := defineManager.FindProcessByTask(task.ProcessInstanceId)
-	//if err != nil {
-	//	return err
-	//}
 	task := entity.(*TaskEntityImpl)
-	execution := GetExecutionEntityManager().FindById(task.ProcessDefineId)
+	execution := GetExecutionEntityManager().FindById(task.ProcessInstanceId)
 	if err != nil {
 		return nil
 	}
-
-	//taskExecution.ExecutionEntityImpl = execution
+	processUtils := utils.ProcessDefinitionUtil{}
+	process := processUtils.GetProcess(execution.GetProcessDefineId())
+	currentTask := process.GetFlowElement(task.GetTaskDefineKey())
+	task.SetCurrentFlowElement(currentTask)
 	if completeCmd.LocalScope {
 		//err = entity.SetVariable(entity, completeCmd.Variables)
 	} else {
@@ -55,7 +55,6 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 	if err != nil {
 		return err
 	}
-	currentTask := task.GetCurrentFlowElement()
 	userTask, ok := currentTask.(*UserTask)
 	if ok {
 		taskListeners := userTask.ExtensionElements.TaskListener
@@ -67,6 +66,9 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 				}
 			}
 		}
+	} else {
+		logger.Error("not task")
+		return errs.ProcessError{Code: "not task"}
 	}
 	command.Agenda.PlanTriggerExecutionOperation(task)
 	return nil

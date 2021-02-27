@@ -13,4 +13,6 @@ type ActivityBehaviorFactory interface {
 	CreateExclusiveGatewayActivityBehavior(exclusiveGateway ExclusiveGateway) ExclusiveGatewayActivityBehavior
 
 	CreateInclusiveGatewayActivityBehavior(inclusiveGateway InclusiveGateway) InclusiveGatewayActivityBehavior
+
+	CreateParallelGatewayActivityBehavior(inclusiveGateway ParallelGateway) ParallelGatewayActivityBehavior
 }

@@ -94,7 +94,7 @@ func TestComplete(t *testing.T) {
 	taskService := processEngineConfiguration.TaskService
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
-	taskService.Complete(38, variables, true)
+	taskService.Complete(98, variables, false)
 }
 
 //测试驳回
@@ -117,5 +117,5 @@ func TestListener(t *testing.T) {
 	eventListeners = append(eventListeners, ActivitiListener{})
 	processEngineConfiguration.AddEventListeners(eventListeners)
 	taskService := processEngineConfiguration.TaskService
-	taskService.Complete(7, nil, true)
+	taskService.Complete(7, nil, false)
 }

@@ -21,12 +21,12 @@ func (backTaskCmd BackTaskCmd) TaskExecute(command interceptor.CommandContext, e
 	execution := GetExecutionEntityManager().FindById(task.ProcessInstanceId)
 	processUtils := utils.ProcessDefinitionUtil{}
 	process := processUtils.GetProcess(execution.GetProcessDefineId())
-	currentTask := process.GetFlowElement(execution.GetCurrentActivityId())
+	currentTask := process.GetFlowElement(task.GetTaskDefineKey())
 	sourceElement := currentTask.GetOutgoing()
 	targetFlowElement := process.GetFlowElement(backTaskCmd.TargetFlowId)
 	sequenceFlows := createTask(targetFlowElement, currentTask.GetId(), backTaskCmd.TargetFlowId)
 	currentTask.SetOutgoing(sequenceFlows)
-	_, err := interceptor.GetCommandExecutorImpl().Exe(CompleteCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{TaskId: backTaskCmd.TaskId}, Variables: nil, LocalScope: true})
+	_, err := interceptor.GetCommandExecutorImpl().Exe(CompleteCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{AbstractTaskCmd: AbstractTaskCmd(CompleteCmd{Variables: nil, LocalScope: true}), TaskId: backTaskCmd.TaskId}})
 	if err != nil {
 		return false, nil
 	}

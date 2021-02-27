@@ -17,9 +17,9 @@ type Task struct {
 }
 
 func (Task) TableName() string {
-	return "task"
+	return "ru_task"
 }
 
 func (Task) getTableName() string {
-	return "task"
+	return "ru_task"
 }

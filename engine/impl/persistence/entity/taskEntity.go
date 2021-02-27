@@ -12,6 +12,8 @@ type TaskEntity interface {
 
 	SetTaskDefineKey(taskDefineKey string)
 
+	GetTaskDefineKey() string
+
 	SetTaskDefineName(taskDefineName string)
 
 	SetExecutionVariables(parameters map[string]interface{}) error

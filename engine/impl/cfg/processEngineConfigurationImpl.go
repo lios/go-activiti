@@ -179,6 +179,9 @@ func getDefaultBpmnParseHandlers() []BpmnParseHandler {
 	handlers = append(handlers, StartEventParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(StartEventParseHandler{})}}})
 	handlers = append(handlers, UserTaskParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(UserTaskParseHandler{})}}})
 	handlers = append(handlers, SequenceFlowParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(SequenceFlowParseHandler{})}}})
+	handlers = append(handlers, ExclusiveGatewayParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(ExclusiveGatewayParseHandler{})}}})
+	handlers = append(handlers, InclusiveGatewayParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(InclusiveGatewayParseHandler{})}}})
+	handlers = append(handlers, ParallelGatewayParseHandler{AbstractActivityBpmnParseHandler: AbstractActivityBpmnParseHandler{AbstractBpmnParseHandler: AbstractBpmnParseHandler{ParseHandler: ParseHandler(ParallelGatewayParseHandler{})}}})
 
 	return handlers
 }

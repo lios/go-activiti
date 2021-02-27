@@ -26,7 +26,7 @@ func (taskService TaskServiceImpl) QueryUndoTask(userId, groupId string) ([]task
 //流程审批完成
 func (taskService TaskServiceImpl) Complete(taskId int64, variables map[string]interface{}, localScope bool) (Task, error) {
 	var task Task
-	exe, err := taskService.GetCommandExecutor().Exe(CompleteCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{TaskId: taskId}, Variables: variables, LocalScope: localScope})
+	exe, err := taskService.GetCommandExecutor().Exe(CompleteCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{AbstractTaskCmd: AbstractTaskCmd(CompleteCmd{Variables: variables, LocalScope: localScope}), TaskId: taskId}})
 	if err != nil {
 		return task, err
 	}
@@ -35,7 +35,7 @@ func (taskService TaskServiceImpl) Complete(taskId int64, variables map[string]i
 
 //查询待审批任务
 func (taskService TaskServiceImpl) BackTask(taskId int64, targetFlowId string) (bool, error) {
-	exe, err := taskService.GetCommandExecutor().Exe(BackTaskCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{TaskId: taskId}, TargetFlowId: targetFlowId})
+	exe, err := taskService.GetCommandExecutor().Exe(BackTaskCmd{NeedsActiveTaskCmd: NeedsActiveTaskCmd{AbstractTaskCmd: AbstractTaskCmd(BackTaskCmd{TargetFlowId: targetFlowId}), TaskId: taskId}})
 	if err != nil {
 		return false, err
 	}
