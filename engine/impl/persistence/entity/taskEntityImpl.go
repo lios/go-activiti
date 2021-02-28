@@ -75,9 +75,8 @@ func (taskEntiy *TaskEntityImpl) getExecution() ExecutionEntity {
 	}
 	return nil
 }
-func (taskEntiy *TaskEntityImpl) SetExecutionVariables(variables map[string]interface{}) error {
-	return taskEntiy.SetVariable(taskEntiy, variables)
-}
+
 func (taskEntiy *TaskEntityImpl) SetScope(variable *Variable) {
-	variable.TaskId = taskEntiy.TaskId
+	variable.TaskId = taskEntiy.GetId()
+	variable.ProcessInstanceId = taskEntiy.GetProcessInstanceId()
 }

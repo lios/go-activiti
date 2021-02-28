@@ -21,15 +21,10 @@ func (historicProcessManager HistoricProcessDataManager) Insert() (err error) {
 
 func (historicProcessManager HistoricProcessDataManager) MarkEnded() (err error) {
 	historicProcess := historicProcessManager.HistoricProcess
-	err = db.DB().Where("proc_inst_id=?", historicProcess.ProcessInstanceId).Update(&historicProcess).Error
+	err = db.DB().Where("proc_inst_id=?", historicProcess.ProcessInstanceId).Table(historicProcess.TableName()).Update(&historicProcess).Error
 	if err != nil {
 		log.Infoln("delete HistoricProcess Err", err)
 		return err
 	}
-	historicActinst := HistoricActinst{}
-	historicActinst.EndTime = historicProcess.EndTime
-	historicProcess.ProcessInstanceId = historicProcess.Id
-	historicActinstManager := HistoricActinstDataManager{}
-	err = historicActinstManager.UpdateProcessInstanceId(historicActinst)
-	return err
+	return nil
 }

@@ -71,7 +71,14 @@ func (execution *ExecutionEntityImpl) SetTaskId(taskId int64) {
 
 }
 func (execution ExecutionEntityImpl) GetProcessVariable() map[string]interface{} {
-	return execution.GetVariable()
+	variables := execution.GetVariable()
+	variableLocal := execution.GetVariableLocal()
+	if variableLocal != nil {
+		for k, v := range variableLocal {
+			variables[k] = v
+		}
+	}
+	return variables
 }
 
 func (execution ExecutionEntityImpl) GetVariable() map[string]interface{} {

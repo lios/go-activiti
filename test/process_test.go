@@ -94,7 +94,7 @@ func TestComplete(t *testing.T) {
 	taskService := processEngineConfiguration.TaskService
 	variables := make(map[string]interface{}, 0)
 	variables["code"] = "0001"
-	taskService.Complete(118, variables, false)
+	taskService.Complete(132, variables, true)
 }
 
 //测试驳回

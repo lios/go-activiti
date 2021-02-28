@@ -48,9 +48,9 @@ func (completeCmd CompleteCmd) executeTaskComplete(entity TaskEntity, command in
 	currentTask := process.GetFlowElement(task.GetTaskDefineKey())
 	task.SetCurrentFlowElement(currentTask)
 	if completeCmd.LocalScope {
-		//err = entity.SetVariable(entity, completeCmd.Variables)
+		err = task.SetVariableLocal(completeCmd.Variables)
 	} else {
-		err = entity.SetExecutionVariables(completeCmd.Variables)
+		err = task.SetVariable(task, completeCmd.Variables)
 	}
 	if err != nil {
 		return err
